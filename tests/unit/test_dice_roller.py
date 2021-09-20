@@ -2,12 +2,7 @@
 import unittest
 import dice_roller
 
-# Note: the roll method returns a tuple; (roll result, min possible roll, max possible roll, median roll)
-# Todo: How would I go about testing the return value of something random?
-#     Also, how would I go about testing randomness?
-
-# TODO: the tests involving the history and clear method will have to be changed into integration tests as they
-#   involving testing the results of multiple methods working together
+# TODO: Should the instance of dice_roller be created inside the test class or here?
 dice_roller_instance = dice_roller.DiceRoller()
 
 
@@ -62,8 +57,28 @@ class DiceRollerTests(unittest.TestCase):
     def test_set_input(self):
         with self.assertRaises(TypeError):
             dice_roller_instance.roll({2, 5})
-    # test <dice_roller_instance.roll('egg')> fails due to no input not being a list or tuple
-    # test dice_roller_instance.roll((1.2, 5)) fails due to number of dice not being an int
-    # test dice_roller_instance.roll((3, 1.414)) fails due to the number of sides not being an int
 
-    pass
+    # test <dice_roller_instance.roll('egg')> fails due to no input not being a list or tuple
+    def test_str_input(self):
+        with self.assertRaises(TypeError):
+            dice_roller_instance.roll('egg')
+
+    # test dice_roller_instance.roll((1.2, 5)) fails due to number of dice not being an int
+    def test_float_num_dice(self):
+        with self.assertRaises(TypeError):
+            dice_roller_instance.roll((1.2, 5))
+
+    # test dice_roller_instance.roll((3, 1.414)) fails due to the number of sides not being an int
+    def test_float_num_sides(self):
+        with self.assertRaises(TypeError):
+            dice_roller_instance.roll((3, 1.414))
+
+    # test dice_roller_instance.roll((1,6,2)) fails due to a tuple having more than two values
+    def test_excess_values(self):
+        with self.assertRaises(TypeError):
+            dice_roller_instance.roll((1, 4, 5))
+
+    # test dice_roller_instance([2]) fails due to a list having only one value
+    def test_missing_values(self):
+        with self.assertRaises(TypeError):
+            dice_roller_instance.roll([2])
