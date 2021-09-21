@@ -1,3 +1,6 @@
+"""
+
+"""
 from random import randint
 
 
@@ -7,7 +10,7 @@ class DiceRoller:
     """
 
     def __init__(self):
-        self.records = []
+        self._records = []
 
     def roll(self, *args):
         """
@@ -63,17 +66,42 @@ class DiceRoller:
 
         role_result = randint(min_val, max_val)
         result = (role_result, min_val, max_val, median_val)
-        self.records.append((dice_rolled, result))
+        self._records.append((dice_rolled, result))
         return result
 
     def history(self):
-        return self.records
+        """
+        Return a JSON friendly dictionary containing the info for all rolls the current instance of dice_roller has made
 
-    def _save_results(self):
-        # TODO: create a way to export all the roll info in a JSON friendly dict
-        pass
+        The dictionary created by this method is formatted as follows: the keys are 'Roll_<num>', and the values are
+        dictionaries containing the keys: 'Dice', 'Result', 'Min', 'Max', 'Median' with the associated values.
+        """
+
+        roll_history = {}
+        counter = 0
+
+        for roll_info in self._records:
+            dice = roll_info[0]
+            result = roll_info[1][0]
+            min_roll = roll_info[1][1]
+            max_roll = roll_info[1][2]
+            median = roll_info[1][3]
+            roll_history[f'Roll_{counter}'] = {'Dice': dice, 'Result': result, 'Min': min_roll, 'Max': max_roll, 'Median': median}
+            counter += 1
+
+        return roll_history
+
+    def clear(self):
+        """
+        Clear the roll history of an instance of dice_roller
+
+        """
+
+        self._records = []
+        return "History Cleared!"
 
 
+# TODO: Delete the following code when finished testing
 if __name__ == '__main__':
     roll_instance = DiceRoller()
     print(roll_instance.roll((1, 20), (2, 10), (1, 100)))

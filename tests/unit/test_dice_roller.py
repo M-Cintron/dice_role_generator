@@ -2,7 +2,6 @@
 import unittest
 import dice_roller
 
-# TODO: Should the instance of dice_roller be created inside the test class or here?
 dice_roller_instance = dice_roller.DiceRoller()
 
 
