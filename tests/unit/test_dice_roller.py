@@ -7,7 +7,7 @@ dice_roller_instance = dice_roller.DiceRoller()
 
 class DiceRollerTests(unittest.TestCase):
 
-    # test <dice_roller_instance.roll()> returns (<any int from 1 to 20>, 1, 20, 10.5)
+    # test .roll() with no arguments rolls 1, 20 sided die
     def test_empty_roll(self):
         roll_0 = dice_roller_instance.roll()
         # check that the random number is some number between 1 and 20 (inclusive)
@@ -15,69 +15,75 @@ class DiceRollerTests(unittest.TestCase):
         # check that the min, max, and median values are correct
         self.assertEqual(roll_0[1:], (1, 20, 10.5))
 
-    # test <dice_roller_instance.roll((1, 20), (2, 10), (1, 100))> returns (<any int from 4 to 140> 4, 140, 72)
+    # test .roll() returns the correct response when rolling 3 different dice
     def test_3_rolls(self):
         roll_1 = dice_roller_instance.roll((1, 20), (2, 10), (1, 100))
         self.assertIn(roll_1[0], range(4, 140+1))
         self.assertEqual(roll_1[1:], (4, 140, 72))
 
-    # test <dice_roller_instance.roll([1, 20], [2, 10], [1, 100])> returns (<any int from 4 to 140> 4, 140, 72)
+    # test .roll() returns correct response when rolling dice in lists
     def test_3_rolls_lists(self):
         roll_2 = dice_roller_instance.roll([1, 20], [2, 10], [1, 100])
         self.assertIn(roll_2[0], range(4, 140+1))
         self.assertEqual(roll_2[1:], (4, 140, 72))
 
-    # test <dice_roller_instance.roll((10, 1))> returns (10, 10, 10, 10)
+    # test test .roll() returns correct response when rolling 10, 1 sided dice
     def test_10_dice_1_side(self):
         roll_3 = dice_roller_instance.roll((10, 1))
         self.assertEqual(roll_3, (10, 10, 10, 10))
 
-    # test <dice_roller_instance.roll((0, 5))> fails due to rolling 0 dice
+    # test .roll() returns correct error when given 0 dice
     def test_0_dice(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, 'Cannot role zero or negative dice'):
             dice_roller_instance.roll((0, 5))
 
-    # test <dice_roller_instance.roll((10, 0))> fails due to rolling 0 sided dice
+    # test .roll() returns correct error when given 0 sided dice
     def test_0_sides(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, 'Cannot role dice with zero or negative sides'):
             dice_roller_instance.roll((10, 0))
 
-    # test <dice_roller_instance.roll((1, -10))> fails due to negative sided die
+    # test .roll() returns correct error when given negative sided dice
     def test_negative_sides(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, 'Cannot role dice with zero or negative sides'):
             dice_roller_instance.roll((1, -10))
 
-    # test <dice_roller_instance.roll((-1, 10))> fails due to negative number of dice
+    # test .roll() returns correct error when given negative number of dice
     def test_negative_dice(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, 'Cannot role zero or negative dice'):
             dice_roller_instance.roll((-1, 10))
 
-    # test <dice_roller_instance.roll({2, 5})> fails due to no input not being a list or tuple
-    def test_set_input(self):
-        with self.assertRaises(TypeError):
-            dice_roller_instance.roll({2, 5})
+    # test .roll() raises correct error when given a dict
+    def test_dict_input(self):
+        with self.assertRaisesRegex(TypeError, 'The arguments must be either lists or tuples'):
+            dice_roller_instance.roll({2: 5})
 
-    # test <dice_roller_instance.roll('egg')> fails due to no input not being a list or tuple
+    # test .roll() raises correct error when given a string
     def test_str_input(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegex(TypeError, 'The arguments must be either lists or tuples'):
             dice_roller_instance.roll('egg')
 
-    # test dice_roller_instance.roll((1.2, 5)) fails due to number of dice not being an int
+    # test .roll() raises correct error when given a set
+    def test_set_input(self):
+        with self.assertRaisesRegex(TypeError, 'The arguments must be either lists or tuples'):
+            dice_roller_instance.roll({1, 6})
+
+    # test .roll() raises correct error when given a non-integer number of dice
     def test_float_num_dice(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegex(TypeError, 'The number of dice must be an integer'):
             dice_roller_instance.roll((1.2, 5))
 
-    # test dice_roller_instance.roll((3, 1.414)) fails due to the number of sides not being an int
+    # test .roll() raises correct error when given dice with a non-integer number of sides
     def test_float_num_sides(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegex(TypeError, 'The number of sides on the dice must be an integer'):
             dice_roller_instance.roll((3, 1.414))
 
-    # test dice_roller_instance.roll((1,6,2)) fails due to a tuple having more than two values
+    # test .roll() raises correct error when a dice input has more than 2 arguments
     def test_excess_values(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegex(TypeError, "roll expected tuple/list containing 2 items, got 3"):
             dice_roller_instance.roll((1, 4, 5))
 
-    # test dice_roller_instance([2]) fails due to a list having only one value
+    # test .roll() raises correct error when a dice input has less than 2 arguments
     def test_missing_values(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegex(TypeError,
+                                    "roll expected tuple/list containing 2 items, got 1"):
             dice_roller_instance.roll([2])

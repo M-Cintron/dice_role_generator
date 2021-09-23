@@ -1,5 +1,10 @@
 """
+Python dice roller.
 
+https://github.com/M-Cintron/dice_roller
+
+Bare bones dice roller that allows you to roll any number of dice and get the result, recall the entire roll history of
+a given DiceRoller instance, and clear that history.
 """
 from random import randint
 
@@ -37,16 +42,17 @@ class DiceRoller:
             if not isinstance(dice_info, (tuple, list)):
                 raise TypeError("The arguments must be either lists or tuples")
 
-            # change dice_info into a tuple for consistency when its values get appended to dice_rolled
+            # change dice_info into a tuple for convenience
             dice_info = tuple(dice_info)
 
-            # check that the tuples or lists only contain two items
+            # check that the tuples only contain two items
             if len(dice_info) != 2:
-                raise TypeError(f"roll expected tuple(s)/list(s) containing 2 items, got {len(dice_info)}")
+                raise TypeError(f"roll expected tuple/list containing 2 items, got {len(dice_info)}")
+
 
             num_dice = dice_info[0]
             num_sides = dice_info[1]
-            # check that values in the inputted tuples or lists are only integers
+            # check that values in the inputted tuples are only integers
             if not isinstance(num_dice, int):
                 raise TypeError("The number of dice must be an integer")
             if not isinstance(num_sides, int):
@@ -100,10 +106,7 @@ class DiceRoller:
         self._records = []
         return "History Cleared!"
 
-
-# TODO: Delete the following code when finished testing
-if __name__ == '__main__':
-    roll_instance = DiceRoller()
-    print(roll_instance.roll((1, 20), (2, 10), (1, 100)))
-    print(roll_instance.roll([1, 20], [2, 10], [1, 100]))
-    print(roll_instance.history())
+if __name__ == "__main__":
+    dice_roller_instance = DiceRoller()
+    print(dice_roller_instance.roll((1, 4, 5)))
+    # print(dice_roller_instance.roll((1, 2), (1, 5)))

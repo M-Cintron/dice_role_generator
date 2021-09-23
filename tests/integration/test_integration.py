@@ -9,7 +9,7 @@ class DiceRollerIntegrationTests(unittest.TestCase):
         dice_roller_instance = dice_roller.DiceRoller()
         self.assertEqual(dice_roller_instance.history(), {})
 
-    # test correct output
+    # test .history returns the correct output after running .roll()
     def test_history(self):
         dice_roller_instance = dice_roller.DiceRoller()
 
@@ -57,7 +57,7 @@ class DiceRollerIntegrationTests(unittest.TestCase):
                          }
                          )
 
-    # clear()> then test .history() returns {}
+    # test that .clear() empties the instance's record and that .history() returns {}
     def test_clear_history(self):
         dice_roller_instance = dice_roller.DiceRoller()
         dice_roller_instance.roll((1, 200))
