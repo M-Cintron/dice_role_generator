@@ -5,6 +5,18 @@ https://github.com/M-Cintron/dice_roller
 
 Bare bones dice roller that allows you to roll any number of dice and get the result, recall the entire roll history of
 a given DiceRoller instance, and clear that history.
+
+Usage:
+    >>> import dice_roller
+
+    >>> class_instance = DiceRoller()
+
+    >>> class_instance.roll()
+    >>> class_instance.roll((1, 10))
+    >>> class_instance.roll((3, 5), (2, 4), (1, 100), ...)
+    >>> class_instance.history()
+    >>> class_instance.clear()
+    >>> class_instance.history()
 """
 from random import randint
 
@@ -15,6 +27,7 @@ class DiceRoller:
     """
 
     def __init__(self):
+        # make the instance's records of rolls protected
         self._records = []
 
     def roll(self, *args):
@@ -22,23 +35,20 @@ class DiceRoller:
         Roll any number of dice and return the result
 
         Note: if no arguments are given to roll(), then it rolls 1, 20 sided die.
-        The arguments should be any number of tuples or lists separated by commas, formatted as:
-        (<number of dice being rolled>, <num sides of dice>).
+        The arguments should be any number of tuples or lists separated by commas.
+        Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
         This method returns a tuple formatted as:
         (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
         """
-
         min_val = 0
         max_val = 0
-        dice_rolled = []
 
-        # if roll is ran with no parameters, assume we are rolling one d20
+        # if roll is ran with no parameters, assume we are rolling 1, 20 sided die
         if len(args) == 0:
-            min_val = 1
-            max_val = 20
+            args = ((1, 20),)
 
-        # check that the arguments given to .roll() are either a list or tuple
         for dice_info in args:
+            # check that the items in args are either a list or tuple
             if not isinstance(dice_info, (tuple, list)):
                 raise TypeError("The arguments must be either lists or tuples")
 
@@ -48,7 +58,6 @@ class DiceRoller:
             # check that the tuples only contain two items
             if len(dice_info) != 2:
                 raise TypeError(f"roll expected tuple/list containing 2 items, got {len(dice_info)}")
-
 
             num_dice = dice_info[0]
             num_sides = dice_info[1]
@@ -66,9 +75,8 @@ class DiceRoller:
             min_val += num_dice
             max_val += num_dice * num_sides
 
-            dice_rolled.append(dice_info)
-
         median_val = (min_val + max_val) / 2
+        dice_rolled = args
 
         role_result = randint(min_val, max_val)
         result = (role_result, min_val, max_val, median_val)
@@ -87,12 +95,14 @@ class DiceRoller:
         counter = 0
 
         for roll_info in self._records:
+            print(roll_info)
             dice = roll_info[0]
             result = roll_info[1][0]
             min_roll = roll_info[1][1]
             max_roll = roll_info[1][2]
             median = roll_info[1][3]
-            roll_history[f'Roll_{counter}'] = {'Dice': dice, 'Result': result, 'Min': min_roll, 'Max': max_roll, 'Median': median}
+            roll_history[f'Roll_{counter}'] = {'Dice': dice, 'Result': result, 'Min': min_roll, 'Max': max_roll,
+                                               'Median': median}
             counter += 1
 
         return roll_history
@@ -106,7 +116,9 @@ class DiceRoller:
         self._records = []
         return "History Cleared!"
 
+
 if __name__ == "__main__":
     dice_roller_instance = DiceRoller()
-    print(dice_roller_instance.roll((1, 4, 5)))
-    # print(dice_roller_instance.roll((1, 2), (1, 5)))
+    print(dice_roller_instance.roll((1, 4)))
+    print(dice_roller_instance.roll((1, 2), (1, 5)))
+    print(dice_roller_instance.history())

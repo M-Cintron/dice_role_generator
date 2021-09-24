@@ -9,7 +9,7 @@ class DiceRollerIntegrationTests(unittest.TestCase):
         dice_roller_instance = dice_roller.DiceRoller()
         self.assertEqual(dice_roller_instance.history(), {})
 
-    # test .history returns the correct output after running .roll()
+    # test .history() returns the correct output after running .roll()
     def test_history(self):
         dice_roller_instance = dice_roller.DiceRoller()
 
@@ -21,12 +21,12 @@ class DiceRollerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(dice_roller_instance.history(),
                          {
-                             'Roll_0': {'Dice': [(1, 20)], 'Result': result_0[0], 'Min': 1, 'Max': 20, 'Median': 10.5},
-                             'Roll_1': {'Dice': [(1, 20), (2, 10), (1, 100)], 'Result': result_1[0], 'Min': 4,
+                             'Roll_0': {'Dice': ((1, 20),), 'Result': result_0[0], 'Min': 1, 'Max': 20, 'Median': 10.5},
+                             'Roll_1': {'Dice': ((1, 20), (2, 10), (1, 100)), 'Result': result_1[0], 'Min': 4,
                                         'Max': 140, 'Median': 72.0},
-                             'Roll_2': {'Dice': [(1, 20), (2, 10), (1, 100)], 'Result': result_2[0], 'Min': 4,
+                             'Roll_2': {'Dice': ((1, 20), (2, 10), (1, 100)), 'Result': result_2[0], 'Min': 4,
                                         'Max': 140, 'Median': 72.0},
-                             'Roll_3': {'Dice': [(10, 1)], 'Result': result_3[0], 'Min': 10, 'Max': 10, 'Median': 10.0}
+                             'Roll_3': {'Dice': ((10, 1),), 'Result': result_3[0], 'Min': 10, 'Max': 10, 'Median': 10.0}
                          }
                          )
 
@@ -45,15 +45,17 @@ class DiceRollerIntegrationTests(unittest.TestCase):
             pass
         result_2 = dice_roller_instance.roll((1, 20), (2, 10))
         result_3 = dice_roller_instance.roll((5, 4))
+        result_4 = dice_roller_instance.roll()
 
         self.assertEqual(dice_roller_instance.history(),
                          {
-                             'Roll_0': {'Dice': [(1, 15)], 'Result': result_0[0], 'Min': 1, 'Max': 15, 'Median': 8.0},
-                             'Roll_1': {'Dice': [(1, 30), (2, 10), (1, 100)], 'Result': result_1[0], 'Min': 4,
+                             'Roll_0': {'Dice': ((1, 15),), 'Result': result_0[0], 'Min': 1, 'Max': 15, 'Median': 8.0},
+                             'Roll_1': {'Dice': ((1, 30), (2, 10), (1, 100)), 'Result': result_1[0], 'Min': 4,
                                         'Max': 150, 'Median': 77.0},
-                             'Roll_2': {'Dice': [(1, 20), (2, 10)], 'Result': result_2[0], 'Min': 3,
+                             'Roll_2': {'Dice': ((1, 20), (2, 10)), 'Result': result_2[0], 'Min': 3,
                                         'Max': 40, 'Median': 21.5},
-                             'Roll_3': {'Dice': [(5, 4)], 'Result': result_3[0], 'Min': 5, 'Max': 20, 'Median': 12.5}
+                             'Roll_3': {'Dice': ((5, 4),), 'Result': result_3[0], 'Min': 5, 'Max': 20, 'Median': 12.5},
+                             'Roll_4': {'Dice': ((1, 20),), 'Result': result_4[0], 'Min': 1, 'Max': 20, 'Median': 10.5},
                          }
                          )
 
