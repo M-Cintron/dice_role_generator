@@ -1,3 +1,4 @@
+"""Integration tests for dice_roller.py"""
 import unittest
 import dice_roller
 
@@ -30,7 +31,7 @@ class DiceRollerIntegrationTests(unittest.TestCase):
                          }
                          )
 
-    # test that  .history() is not messed up by invalid rolls
+    # test that .history() is not messed up by invalid rolls
     def test_history_with_invalid_inputs(self):
         dice_roller_instance = dice_roller.DiceRoller()
         result_0 = dice_roller_instance.roll((1, 15))

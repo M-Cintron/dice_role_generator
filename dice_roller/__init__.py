@@ -95,7 +95,6 @@ class DiceRoller:
         counter = 0
 
         for roll_info in self._records:
-            print(roll_info)
             dice = roll_info[0]
             result = roll_info[1][0]
             min_roll = roll_info[1][1]
@@ -115,10 +114,3 @@ class DiceRoller:
 
         self._records = []
         return "History Cleared!"
-
-
-if __name__ == "__main__":
-    dice_roller_instance = DiceRoller()
-    print(dice_roller_instance.roll((1, 4)))
-    print(dice_roller_instance.roll((1, 2), (1, 5)))
-    print(dice_roller_instance.history())

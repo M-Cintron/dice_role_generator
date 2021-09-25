@@ -132,5 +132,4 @@ dmypy.json
 .idea/
 
 # Personal notes
-Documentation_WIP.ODT
-.~lock.Documentation_WIP.ODT#
+/personal_notes
