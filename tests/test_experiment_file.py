@@ -4,7 +4,6 @@ import os
 
 class ExperimentingTest(unittest.TestCase):
     def test_experiment_method(self):
-        yourpath = 'D:\Python Scripts\dice_roller'
         yourpath = os.getcwd()
 
         for root, dirs, files in os.walk(yourpath, topdown=True):
