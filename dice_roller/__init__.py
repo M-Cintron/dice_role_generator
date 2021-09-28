@@ -68,9 +68,9 @@ class DiceRoller:
                 raise TypeError("The number of sides on the dice must be an integer")
 
             if num_dice <= 0:
-                raise ValueError("Cannot role zero or negative dice")
+                raise ValueError("Cannot roll zero or negative dice")
             if num_sides <= 0:
-                raise ValueError("Cannot role dice with zero or negative sides")
+                raise ValueError("Cannot roll dice with zero or negative sides")
 
             min_val += num_dice
             max_val += num_dice * num_sides
@@ -78,8 +78,8 @@ class DiceRoller:
         median_val = (min_val + max_val) / 2
         dice_rolled = args
 
-        role_result = randint(min_val, max_val)
-        result = (role_result, min_val, max_val, median_val)
+        roll_result = randint(min_val, max_val)
+        result = (roll_result, min_val, max_val, median_val)
         self._records.append((dice_rolled, result))
         return result
 

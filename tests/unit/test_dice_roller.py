@@ -34,22 +34,22 @@ class DiceRollerTests(unittest.TestCase):
 
     # test .roll() returns correct error when given 0 dice
     def test_0_dice(self):
-        with self.assertRaisesRegex(ValueError, 'Cannot role zero or negative dice'):
+        with self.assertRaisesRegex(ValueError, 'Cannot roll zero or negative dice'):
             dice_roller_instance.roll((0, 5))
 
     # test .roll() returns correct error when given 0 sided dice
     def test_0_sides(self):
-        with self.assertRaisesRegex(ValueError, 'Cannot role dice with zero or negative sides'):
+        with self.assertRaisesRegex(ValueError, 'Cannot roll dice with zero or negative sides'):
             dice_roller_instance.roll((10, 0))
 
     # test .roll() returns correct error when given negative sided dice
     def test_negative_sides(self):
-        with self.assertRaisesRegex(ValueError, 'Cannot role dice with zero or negative sides'):
+        with self.assertRaisesRegex(ValueError, 'Cannot roll dice with zero or negative sides'):
             dice_roller_instance.roll((1, -10))
 
     # test .roll() returns correct error when given negative number of dice
     def test_negative_dice(self):
-        with self.assertRaisesRegex(ValueError, 'Cannot role zero or negative dice'):
+        with self.assertRaisesRegex(ValueError, 'Cannot roll zero or negative dice'):
             dice_roller_instance.roll((-1, 10))
 
     # test .roll() raises correct error when given a dict

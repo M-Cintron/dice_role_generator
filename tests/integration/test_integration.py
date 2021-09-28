@@ -14,7 +14,7 @@ class DiceRollerIntegrationTests(unittest.TestCase):
     def test_history(self):
         dice_roller_instance = dice_roller.DiceRoller()
 
-        # run 4 rolls, save the results so we can get the role result for the assert below
+        # run 4 rolls, save the results so we can get the roll result for the assert below
         result_0 = dice_roller_instance.roll((1, 20))
         result_1 = dice_roller_instance.roll((1, 20), (2, 10), (1, 100))
         result_2 = dice_roller_instance.roll((1, 20), (2, 10), (1, 100))
