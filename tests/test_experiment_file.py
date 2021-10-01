@@ -5,6 +5,8 @@ import os
 class ExperimentingTest(unittest.TestCase):
     def test_experiment_method(self):
         your_path = os.getcwd()
+        acceptable_roles = {"README.md": 1, "test_experiment_file.py": 9}
+        found_roles = {}
 
         for root, dirs, files in os.walk(your_path, topdown=True):
 
@@ -14,11 +16,12 @@ class ExperimentingTest(unittest.TestCase):
             for file in files:
                 print(f"Dealing with file {os.path.join(root, file)}")
                 with open(os.path.join(root, file), "r") as f:
-                    for line in f:
-                        print(line)
-        self.assertEqual(your_path, "egg")
+                    file_string = f.read()
+                    num_roles = file_string.count('role')
+                    if num_roles > 0:
+                        found_roles[file] = num_roles
+
+        self.assertEqual(found_roles, acceptable_roles)
 
 if __name__ == "__main__":
     unittest.main()
-    # for name in dirs:
-    #     print('for name in dirs:', os.path.join(root, name))
