@@ -87,3 +87,5 @@ class DiceRollerTests(unittest.TestCase):
         with self.assertRaisesRegex(TypeError,
                                     "roll expected tuple/list containing 2 items, got 1"):
             dice_roller_instance.roll([2])
+
+# TODO: DELETE THIS LINE LATER; TESTING 'ROLE' TYPO HUNTING
