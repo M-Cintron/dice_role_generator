@@ -42,6 +42,3 @@ class ExperimentingTest(unittest.TestCase):
                         found_roles[f'{relative_file_path}\\{file}'] = num_roles
 
         self.assertEqual(found_roles, acceptable_roles)
-
-if __name__ == "__main__":
-    unittest.main()
