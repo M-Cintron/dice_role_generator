@@ -20,10 +20,7 @@ class ExperimentingTest(unittest.TestCase):
         # make a dic of file names, relative to the dice_roller main directory, and the values being the number of
         # 'roles' found in them.
         # To add a file to acceptable_roles, include the top two directories are:'dice_roller/dice_roller/'
-        acceptable_roles = {"dice_roller/dice_roller/README.md": 1,
-                            "dice_roller/dice_roller/dice_roller/__init__.py": 1,
-                            "dice_roller/dice_roller/tests/unit/test_dice_roller.py": 1,
-                            'dice_roller/dice_roller/tests/integration/test_integration.py': 2}
+        acceptable_roles = {"dice_roller/dice_roller/README.md": 1}
         found_roles = {}
 
         # go through every file in the main dice_roller directory, including those in sub directories

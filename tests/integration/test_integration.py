@@ -71,5 +71,3 @@ class DiceRollerIntegrationTests(unittest.TestCase):
         dice_roller_instance.clear()
 
         self.assertEqual(dice_roller_instance.history(), {})
-
-# TODO: DELETE THIS LINE LATER; TESTING 'ROLE' TYPO HUNTING rOLe

@@ -114,5 +114,3 @@ class DiceRoller:
 
         self._records = []
         return "History Cleared!"
-
-# TODO: DELETE THIS LINE LATER; TESTING 'role' TYPO HUNTING
