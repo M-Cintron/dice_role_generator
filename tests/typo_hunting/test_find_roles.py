@@ -10,21 +10,21 @@ class ExperimentingTest(unittest.TestCase):
         # the tests directory part.
         path_of_test_directory = os.getcwd()
         if not path_of_test_directory.endswith("dice_roller"):
-            path_parts = path_of_test_directory.split('\\')
+            path_parts = path_of_test_directory.split('/')
             print(path_parts)
             dice_roller_index = path_parts.index('dice_roller')
             # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
             # path of the whole directory: ..\dice_roller
-            project_relative_path = '\\'.join(path_parts[:dice_roller_index + 1])
+            project_relative_path = '/'.join(path_parts[:dice_roller_index + 1])
         else:
             project_relative_path = path_of_test_directory
 
         # make a dic of file names, relative to the dice_roller main directory, and the values being the number of
         # 'roles' found in them
-        acceptable_roles = {"dice_roller\\README.md": 1, "dice_roller\\tests\\typo_hunting\\test_find_roles.py": 13,
-                            "dice_roller\\dice_roller\\__init__.py": 1,
-                            "dice_roller\\tests\\unit\\test_dice_roller.py": 1,
-                            'dice_roller\\tests\\integration\\test_integration.py': 2}
+        acceptable_roles = {"dice_roller/README.md": 1, "dice_roller/tests/typo_hunting/test_find_roles.py": 13,
+                            "dice_roller/dice_roller/__init__.py": 1,
+                            "dice_roller/tests/unit/test_dice_roller.py": 1,
+                            'dice_roller/tests/integration/test_integration.py': 2}
         found_roles = {}
 
         for root, dirs, files in os.walk(project_relative_path, topdown=True):
@@ -45,9 +45,9 @@ class ExperimentingTest(unittest.TestCase):
                         file_path_parts = root.split('/')
                         print(path_of_test_directory, project_relative_path, root, file)
                         dice_roller_index = file_path_parts.index('dice_roller')
-                        relative_file_path = '\\'.join(file_path_parts[dice_roller_index:])
+                        relative_file_path = '/'.join(file_path_parts[dice_roller_index:])
 
                         # add the relative file path and the number of 'roles found to the found_roles dic
-                        found_roles[f'{relative_file_path}\\{file}'] = num_roles
+                        found_roles[f'{relative_file_path}/{file}'] = num_roles
 
         self.assertEqual(found_roles, acceptable_roles)
