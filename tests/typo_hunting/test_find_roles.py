@@ -19,6 +19,13 @@ class ExperimentingTest(unittest.TestCase):
         else:
             project_relative_path = path_of_test_directory
 
+        path_parts = path_of_test_directory.split('/')
+        print(path_parts)
+        dice_roller_index = path_parts.index('dice_roller')
+        # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
+        # path of the whole directory: ..\dice_roller
+        project_relative_path = '/'.join(path_parts[:dice_roller_index + 1])
+
         # make a dic of file names, relative to the dice_roller main directory, and the values being the number of
         # 'roles' found in them.
         # To add a file to acceptable_roles, include the top two directories are:'dice_roller/dice_roller/'
