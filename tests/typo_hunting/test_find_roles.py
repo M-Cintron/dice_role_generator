@@ -9,15 +9,6 @@ class ExperimentingTest(unittest.TestCase):
         # get the relative path of the dice_roller main directory by getting the current working directory, and removing
         # the tests directory part.
         path_of_test_directory = os.getcwd()
-        # if not path_of_test_directory.endswith("dice_roller"):
-        #     path_parts = path_of_test_directory.split('/')
-        #     print(path_parts)
-        #     dice_roller_index = path_parts.index('dice_roller')
-        #     # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
-        #     # path of the whole directory: ..\dice_roller
-        #     project_relative_path = '/'.join(path_parts[:dice_roller_index + 1])
-        # else:
-        #     project_relative_path = path_of_test_directory
 
         path_parts = path_of_test_directory.split('/')
         print(path_parts)
@@ -30,7 +21,6 @@ class ExperimentingTest(unittest.TestCase):
         # 'roles' found in them.
         # To add a file to acceptable_roles, include the top two directories are:'dice_roller/dice_roller/'
         acceptable_roles = {"dice_roller/dice_roller/README.md": 1,
-                            "dice_roller/dice_roller/tests/typo_hunting/test_find_roles.py": 15,
                             "dice_roller/dice_roller/dice_roller/__init__.py": 1,
                             "dice_roller/dice_roller/tests/unit/test_dice_roller.py": 1,
                             'dice_roller/dice_roller/tests/integration/test_integration.py': 2}
@@ -40,7 +30,7 @@ class ExperimentingTest(unittest.TestCase):
         for root, dirs, files in os.walk(project_relative_path, topdown=True):
             # change the list of directories to walk through to NOT include the named directories
             dirs[:] = [d for d in dirs if d not in ['.git', '.idea', 'personal_notes', '__pycache__', '.pytest_cache',
-                                                    '.github']]
+                                                    '.github', 'typo_hunting']]
 
             # go through each file individually
             for file in files:
