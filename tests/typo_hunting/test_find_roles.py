@@ -9,6 +9,7 @@ class ExperimentingTest(unittest.TestCase):
         path_of_test_directory = os.getcwd()
         if not path_of_test_directory.endswith("dice_roller"):
             path_parts = path_of_test_directory.split('\\')
+            print(path_parts)
             dice_roller_index = path_parts.index('dice_roller')
             # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
             # path of the whole directory: ..\dice_roller
@@ -41,7 +42,7 @@ class ExperimentingTest(unittest.TestCase):
                         # get the relative path of the current file starting from the dice_roller directory
                         file_path_parts = root.split('\\')
                         print(path_of_test_directory, project_relative_path, root, file)
-                        # dice_roller_index = file_path_parts.index('dice_roller')
+                        dice_roller_index = file_path_parts.index('dice_roller')
                         relative_file_path = '\\'.join(file_path_parts[dice_roller_index:])
 
                         # add the relative file path and the number of 'roles found to the found_roles dic
