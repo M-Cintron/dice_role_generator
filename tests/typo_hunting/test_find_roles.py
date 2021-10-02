@@ -9,15 +9,15 @@ class ExperimentingTest(unittest.TestCase):
         # get the relative path of the dice_roller main directory by getting the current working directory, and removing
         # the tests directory part.
         path_of_test_directory = os.getcwd()
-        if not path_of_test_directory.endswith("dice_roller"):
-            path_parts = path_of_test_directory.split('/')
-            print(path_parts)
-            dice_roller_index = path_parts.index('dice_roller')
-            # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
-            # path of the whole directory: ..\dice_roller
-            project_relative_path = '/'.join(path_parts[:dice_roller_index + 1])
-        else:
-            project_relative_path = path_of_test_directory
+        # if not path_of_test_directory.endswith("dice_roller"):
+        #     path_parts = path_of_test_directory.split('/')
+        #     print(path_parts)
+        #     dice_roller_index = path_parts.index('dice_roller')
+        #     # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
+        #     # path of the whole directory: ..\dice_roller
+        #     project_relative_path = '/'.join(path_parts[:dice_roller_index + 1])
+        # else:
+        #     project_relative_path = path_of_test_directory
 
         path_parts = path_of_test_directory.split('/')
         print(path_parts)
