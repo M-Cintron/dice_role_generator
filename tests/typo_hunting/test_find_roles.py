@@ -3,6 +3,8 @@ import os
 
 
 class ExperimentingTest(unittest.TestCase):
+    maxDiff = None
+
     def test_experiment_method(self):
         # get the relative path of the dice_roller main directory by getting the current working directory, and removing
         # the tests directory part.
