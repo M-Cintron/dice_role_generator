@@ -40,7 +40,7 @@ class ExperimentingTest(unittest.TestCase):
 
                     if num_roles > 0:
                         # get the relative path of the current file starting from the dice_roller directory
-                        file_path_parts = root.split('\\')
+                        file_path_parts = root.split('/')
                         print(path_of_test_directory, project_relative_path, root, file)
                         dice_roller_index = file_path_parts.index('dice_roller')
                         relative_file_path = '\\'.join(file_path_parts[dice_roller_index:])
