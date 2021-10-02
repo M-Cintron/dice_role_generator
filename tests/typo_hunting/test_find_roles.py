@@ -23,7 +23,7 @@ class ExperimentingTest(unittest.TestCase):
         # 'roles' found in them.
         # To add a file to acceptable_roles, include the top two directories are:'dice_roller/dice_roller/'
         acceptable_roles = {"dice_roller/dice_roller/README.md": 1,
-                            "dice_roller/dice_roller/tests/typo_hunting/test_find_roles.py": 14,
+                            "dice_roller/dice_roller/tests/typo_hunting/test_find_roles.py": 15,
                             "dice_roller/dice_roller/dice_roller/__init__.py": 1,
                             "dice_roller/dice_roller/tests/unit/test_dice_roller.py": 1,
                             'dice_roller/dice_roller/tests/integration/test_integration.py': 2}
