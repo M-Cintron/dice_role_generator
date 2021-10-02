@@ -21,10 +21,11 @@ class ExperimentingTest(unittest.TestCase):
 
         # make a dic of file names, relative to the dice_roller main directory, and the values being the number of
         # 'roles' found in them
-        acceptable_roles = {"dice_roller/README.md": 1, "dice_roller/tests/typo_hunting/test_find_roles.py": 13,
-                            "dice_roller/dice_roller/__init__.py": 1,
-                            "dice_roller/tests/unit/test_dice_roller.py": 1,
-                            'dice_roller/tests/integration/test_integration.py': 2}
+        acceptable_roles = {"dice_roller/dice_roller/README.md": 1,
+                            "dice_roller/dice_roller/tests/typo_hunting/test_find_roles.py": 13,
+                            "dice_roller/dice_roller/dice_roller/__init__.py": 1,
+                            "dice_roller/dice_roller/tests/unit/test_dice_roller.py": 1,
+                            'dice_roller/dice_roller/tests/integration/test_integration.py': 2}
         found_roles = {}
 
         for root, dirs, files in os.walk(project_relative_path, topdown=True):
