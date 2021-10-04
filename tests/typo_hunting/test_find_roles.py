@@ -2,16 +2,15 @@ import unittest
 import os
 
 
-class ExperimentingTest(unittest.TestCase):
+class FindMistake(unittest.TestCase):
     maxDiff = None
 
-    def test_experiment_method(self):
+    def test_find_typo(self):
         # get the relative path of the dice_roller main directory by getting the current working directory, and removing
         # the tests directory part.
         path_of_test_directory = os.getcwd()
 
         path_parts = path_of_test_directory.split('/')
-        print(path_parts)
         dice_roller_index = path_parts.index('dice_roller')
         # splicing off the last two sub directories from ..\dice_roller\tests\typo_hunting so we can have the relative
         # path of the whole directory: ..\dice_roller
@@ -20,7 +19,7 @@ class ExperimentingTest(unittest.TestCase):
         # make a dic of file names, relative to the dice_roller main directory, and the values being the number of
         # 'roles' found in them.
         # To add a file to acceptable_roles, include the top two directories are:'dice_roller/dice_roller/'
-        acceptable_roles = {"dice_roller/dice_roller/README.md": 13}
+        acceptable_roles = {"dice_roller/dice_roller/README.md": 13, }
         found_roles = {}
 
         # go through every file in the main dice_roller directory, including those in sub directories
