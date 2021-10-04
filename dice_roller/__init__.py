@@ -95,13 +95,22 @@ class DiceRoller:
         counter = 0
 
         for roll_info in self._records:
-            dice = roll_info[0]
             result = roll_info[1][0]
             min_roll = roll_info[1][1]
             max_roll = roll_info[1][2]
             median = roll_info[1][3]
-            roll_history[f'Roll_{counter}'] = {'Dice': dice, 'Result': result, 'Min': min_roll, 'Max': max_roll,
-                                               'Median': median}
+            roll_history[f'roll_{counter}'] = {'dice': {}, 'result': result, 'min': min_roll, 'max': max_roll,
+                                               'median': median}
+            # for every die inputted, add it to the value of the 'dice' key in roll_<current_role>
+            dice_counter = 0
+            dice = roll_info[0]
+            for die in dice:
+                num_dice = die[0]
+                num_sides = die[1]
+                roll_history[f'roll_{counter}']['dice'].update(
+                    {f'dice_{dice_counter}': {"number_of_dice": num_dice, "number_of_sides": num_sides}})
+                dice_counter += 1
+
             counter += 1
 
         return roll_history

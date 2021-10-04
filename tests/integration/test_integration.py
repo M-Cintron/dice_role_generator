@@ -22,12 +22,18 @@ class DiceRollerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(dice_roller_instance.history(),
                          {
-                             'Roll_0': {'Dice': ((1, 20),), 'Result': result_0[0], 'Min': 1, 'Max': 20, 'Median': 10.5},
-                             'Roll_1': {'Dice': ((1, 20), (2, 10), (1, 100)), 'Result': result_1[0], 'Min': 4,
-                                        'Max': 140, 'Median': 72.0},
-                             'Roll_2': {'Dice': ((1, 20), (2, 10), (1, 100)), 'Result': result_2[0], 'Min': 4,
-                                        'Max': 140, 'Median': 72.0},
-                             'Roll_3': {'Dice': ((10, 1),), 'Result': result_3[0], 'Min': 10, 'Max': 10, 'Median': 10.0}
+                             'roll_0': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20}},
+                                        'result': result_0[0], 'min': 1, 'max': 20, 'median': 10.5},
+                             'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20},
+                                                 'dice_1': {'number_of_dice': 2, 'number_of_sides': 10},
+                                                 'dice_2': {'number_of_dice': 1, 'number_of_sides': 100}},
+                                        'result': result_1[0], 'min': 4, 'max': 140, 'median': 72.0},
+                             'roll_2': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20},
+                                                 'dice_1': {'number_of_dice': 2, 'number_of_sides': 10},
+                                                 'dice_2': {'number_of_dice': 1, 'number_of_sides': 100}},
+                                        'result': result_2[0], 'min': 4, 'max': 140, 'median': 72.0},
+                             'roll_3': {'dice': {'dice_0': {'number_of_dice': 10, 'number_of_sides': 1}},
+                                        'result': result_3[0], 'min': 10, 'max': 10, 'median': 10.0}
                          }
                          )
 
@@ -50,13 +56,19 @@ class DiceRollerIntegrationTests(unittest.TestCase):
 
         self.assertEqual(dice_roller_instance.history(),
                          {
-                             'Roll_0': {'Dice': ((1, 15),), 'Result': result_0[0], 'Min': 1, 'Max': 15, 'Median': 8.0},
-                             'Roll_1': {'Dice': ((1, 30), (2, 10), (1, 100)), 'Result': result_1[0], 'Min': 4,
-                                        'Max': 150, 'Median': 77.0},
-                             'Roll_2': {'Dice': ((1, 20), (2, 10)), 'Result': result_2[0], 'Min': 3,
-                                        'Max': 40, 'Median': 21.5},
-                             'Roll_3': {'Dice': ((5, 4),), 'Result': result_3[0], 'Min': 5, 'Max': 20, 'Median': 12.5},
-                             'Roll_4': {'Dice': ((1, 20),), 'Result': result_4[0], 'Min': 1, 'Max': 20, 'Median': 10.5},
+                             'roll_0': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 15}},
+                                        'result': result_0[0], 'min': 1, 'max': 15, 'median': 8.0},
+                             'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 30},
+                                                 'dice_1': {'number_of_dice': 2, 'number_of_sides': 10},
+                                                 'dice_2': {'number_of_dice': 1, 'number_of_sides': 100}},
+                                        'result': result_1[0], 'min': 4, 'max': 150, 'median': 77.0},
+                             'roll_2': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20},
+                                                 'dice_1': {'number_of_dice': 2, 'number_of_sides': 10}},
+                                        'result': result_2[0], 'min': 3, 'max': 40, 'median': 21.5},
+                             'roll_3': {'dice': {'dice_0': {'number_of_dice': 5, 'number_of_sides': 4}},
+                                        'result': result_3[0], 'min': 5, 'max': 20, 'median': 12.5},
+                             'roll_4': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20}},
+                                        'result': result_4[0], 'min': 1, 'max': 20, 'median': 10.5},
                          }
                          )
 

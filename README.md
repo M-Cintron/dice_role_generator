@@ -10,7 +10,7 @@ Simple Python program for generating random numbers based on inputted dice.
 
 ### Things I'd like to do (but might not get to):
 - [x] Make some test to make sure I'm not typing "role" instead of "roll" in every file
-- [ ] Reformat .history() so that the values associated with "Dice" keys are dictionaries with the keys: 'num_dice', and 'num sides'
+- [x] Reformat .history() so that the values associated with "Dice" keys are dictionaries with the keys: 'num_dice', and 'num sides'
 - [ ] Revise the .roll() method to also function as a static method
 - [ ] Implement advantage and disadvantage rolling
 - [ ] Write a subclass of dice_roller that adds mobile friendly GUI (Kivy)
@@ -88,13 +88,15 @@ print(new_instance.history())
 >>> {}
 
 print(new_instance.roll((1, 10), (3, 4), (1, 1)))
->>> (17, 5, 23, 14.0)
+>>> (7, 5, 23, 14.0)
 print(new_instance.roll((1, 4), (2, 6)))
->>> (12, 3, 16, 9.5)
+>>> (15, 3, 16, 9.5)
 
 print(new_instance.history())
->>> {'Roll_0': {'Dice': ((1, 10), (3, 4), (1, 1)), 'Result': 17, 'Min': 5, 'Max': 23, 'Median': 14.0}, 'Roll_1': {'Dice': ((1, 4),
- (2, 6)), 'Result': 12, 'Min': 3, 'Max': 16, 'Median': 9.5}}
+>>> {'roll_0': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 10}, 
+'dice_1': {'number_of_dice': 3, 'number_of_sides': 4}, 'dice_2': {'number_of_dice': 1, 'number_of_sides': 1}}, 
+'result': 7, 'min': 5, 'max': 23, 'median': 14.0}, 'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 4}, 
+'dice_1': {'number_of_dice': 2, 'number_of_sides': 6}}, 'result': 15, 'min': 3, 'max': 16, 'median': 9.5}}
 ```
 Use Python's json package to 'pretty print' the dictionary
 ```
@@ -103,41 +105,41 @@ import json
 history_dict = new_instance.history()
 print(json.dumps(history_dict, indent=4))
 >>>{
-    "Roll_0": {
-        "Dice": [
-            [
-                1,
-                10
-            ],
-            [
-                3,
-                4
-            ],
-            [
-                1,
-                1
-            ]
-        ],
-        "Result": 14,
-        "Min": 5,
-        "Max": 23,
-        "Median": 14.0
+    "roll_0": {
+        "dice": {
+            "dice_0": {
+                "number_of_dice": 1,
+                "number_of_sides": 10
+            },
+            "dice_1": {
+                "number_of_dice": 3,
+                "number_of_sides": 4
+            },
+            "dice_2": {
+                "number_of_dice": 1,
+                "number_of_sides": 1
+            }
+        },
+        "result": 7,
+        "min": 5,
+        "max": 23,
+        "median": 14.0
     },
-    "Roll_1": {
-        "Dice": [
-            [
-                1,
-                4
-            ],
-            [
-                2,
-                6
-            ]
-        ],
-        "Result": 8,
-        "Min": 3,
-        "Max": 16,
-        "Median": 9.5
+    "roll_1": {
+        "dice": {
+            "dice_0": {
+                "number_of_dice": 1,
+                "number_of_sides": 4
+            },
+            "dice_1": {
+                "number_of_dice": 2,
+                "number_of_sides": 6
+            }
+        },
+        "result": 15,
+        "min": 3,
+        "max": 16,
+        "median": 9.5
     }
 }
 ```
@@ -164,8 +166,8 @@ print(third_instance.history())
 Among the tests for dice_roller there is a directory called typo_hunting, containing a file called test_find_roles.
 This purpose of this test is to find what files have a 'role' written in them, and how often it occurs in a given 
 file.  This was created because M-Cintron kept on writing 'role's instead of 'roll's throughout this project.
-If there is an unexpected number of 'role's in any file, test_find_roles will fail.
-If a file is supposed to have 'role's written in it, go to test_find_roles, add the file's path to the 
+If there is an unexpected number of 'role's in any file, (or if the test is ran on Windows) test_find_roles 
+will fail. If a file is supposed to have 'role's written in it, go to test_find_roles, add the file's path to the 
 dictionary 'acceptable_roles' as a string, and the associated value being the number of times 'role' appears
 in that file.  Make sure that the top two directories of the file path are 'dice_roller/dice_roller'.  
 
