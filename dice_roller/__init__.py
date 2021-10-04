@@ -101,7 +101,7 @@ class DiceRoller:
             median = roll_info[1][3]
             roll_history[f'roll_{counter}'] = {'dice': {}, 'result': result, 'min': min_roll, 'max': max_roll,
                                                'median': median}
-            # for every die inputted, add it to the value of the 'dice' key in roll_<current_role>
+            # for every die inputted, add it to the value of the 'dice' key in roll_<current_roll>
             dice_counter = 0
             dice = roll_info[0]
             for die in dice:
