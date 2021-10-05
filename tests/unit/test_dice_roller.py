@@ -79,11 +79,11 @@ class DiceRollerTests(unittest.TestCase):
 
     # test .roll() raises correct error when a dice input has more than 2 arguments
     def test_excess_values(self):
-        with self.assertRaisesRegex(TypeError, "roll expected tuple/list containing 2 items, got 3"):
+        with self.assertRaisesRegex(TypeError, "dice_roller expected tuple/list containing 2 items, got 3"):
             dice_roller_instance.roll((1, 4, 5))
 
     # test .roll() raises correct error when a dice input has less than 2 arguments
     def test_missing_values(self):
         with self.assertRaisesRegex(TypeError,
-                                    "roll expected tuple/list containing 2 items, got 1"):
+                                    "dice_roller expected tuple/list containing 2 items, got 1"):
             dice_roller_instance.roll([2])
