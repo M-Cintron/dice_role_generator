@@ -103,7 +103,7 @@ class DiceRoller:
         Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
         This method returns a tuple formatted as:
         (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
-        This method also stores the dice rolled and the result of said role which can be accessed with the history()
+        This method also stores the dice rolled and the result of said roll which can be accessed with the history()
         method
         """
 
