@@ -3,20 +3,29 @@ Python dice roller.
 
 https://github.com/M-Cintron/dice_roller
 
-Bare bones dice roller that allows you to roll any number of dice and get the result, recall the entire roll history of
-a given DiceRoller instance, and clear that history.
+Bare bones dice roller that allows you to create a class that can roll any number of dice and get the result, recall
+the entire roll history of a given DiceRoller instance, and clear that history.  Or just roll some dice without creating
+a class instance.
 
 Usage:
     >>> import dice_roller
 
-    >>> class_instance = DiceRoller()
+    >>> class_instance = dice_roller.DiceRoller()
 
-    >>> class_instance.roll()
-    >>> class_instance.roll((1, 10))
-    >>> class_instance.roll((3, 5), (2, 4), (1, 100), ...)
-    >>> class_instance.history()
+    >>> print(class_instance.roll())
+    >>> print(class_instance.roll((1, 10)))
+    >>> print(class_instance.roll((3, 5), (2, 4), (1, 100), ...))
+    >>> print(class_instance.history())
     >>> class_instance.clear()
-    >>> class_instance.history()
+    >>> print(class_instance.history())
+
+OR:
+    >>> from dice_roller import DiceRoller
+
+    >>> print(DiceRoller.static_roll())
+    >>> print(DiceRoller.static_roll((1, 4), (2, 6)))
+    >>> print(DiceRoller.static_roll((7, 2), (1, 8), (1, 12)))
+
 """
 from random import randint
 
@@ -30,20 +39,23 @@ class DiceRoller:
         # make the instance's records of rolls protected
         self._records = []
 
-    def roll(self, *args):
+    @staticmethod
+    def _calculate_roll(*args):
         """
-        Roll any number of dice and return the result
+        The method the performs the roll calculations for roll() and static_roll()
+        Roll any number of dice, return and save the result.
 
-        Note: if no arguments are given to roll(), then it rolls 1, 20 sided die.
+        Note: if no arguments are given to _calculate_roll(), then it rolls 1, 20 sided die.
         The arguments should be any number of tuples or lists separated by commas.
         Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
         This method returns a tuple formatted as:
         (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
         """
+
         min_val = 0
         max_val = 0
 
-        # if roll is ran with no parameters, assume we are rolling 1, 20 sided die
+        # if _calculate_roll() is ran with no parameters, assume we are rolling 1, 20 sided die
         if len(args) == 0:
             args = ((1, 20),)
 
@@ -57,7 +69,7 @@ class DiceRoller:
 
             # check that the tuples only contain two items
             if len(dice_info) != 2:
-                raise TypeError(f"roll expected tuple/list containing 2 items, got {len(dice_info)}")
+                raise TypeError(f"dice_roller expected tuple/list containing 2 items, got {len(dice_info)}")
 
             num_dice = dice_info[0]
             num_sides = dice_info[1]
@@ -75,12 +87,42 @@ class DiceRoller:
             min_val += num_dice
             max_val += num_dice * num_sides
 
-        median_val = (min_val + max_val) / 2
         dice_rolled = args
-
+        median_val = (min_val + max_val) / 2
         roll_result = randint(min_val, max_val)
         result = (roll_result, min_val, max_val, median_val)
+        return dice_rolled, result
+
+    # TODO: Add documentation to the two new rolls
+    def roll(self, *args):
+        """
+        Roll any number of dice, return and SAVE the result.
+
+        Note: if no arguments are given to roll(), then it rolls 1, 20 sided die.
+        The arguments should be any number of tuples or lists separated by commas.
+        Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
+        This method returns a tuple formatted as:
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+        This method also stores the dice rolled and the result of said role which can be accessed with the history()
+        method
+        """
+
+        dice_rolled, result = self._calculate_roll(*args)
         self._records.append((dice_rolled, result))
+        return result
+
+    @staticmethod
+    def static_roll(*args):
+        """
+        Roll any number of dice, and return the result.
+
+        Note: if no arguments are given to static_roll(), then it rolls 1, 20 sided die.
+        The arguments should be any number of tuples or lists separated by commas.
+        Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
+        This method returns a tuple formatted as:
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+        """
+        result = DiceRoller._calculate_roll(*args)[1]
         return result
 
     def history(self):
