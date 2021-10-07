@@ -1,3 +1,4 @@
+"""A test to find places where 'role' is written in dice_roller"""
 import unittest
 import os
 
