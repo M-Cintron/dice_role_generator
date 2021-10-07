@@ -40,16 +40,17 @@ class DiceRoller:
         self._records = []
 
     @staticmethod
+    # make _calculate_roll a static method so both roll() and static_roll() can use it
     def _calculate_roll(*args):
         """
         The method the performs the roll calculations for roll() and static_roll()
-        Roll any number of dice, return and save the result.
+        Roll any number of dice, return and the dice rolled and the result.
 
         Note: if no arguments are given to _calculate_roll(), then it rolls 1, 20 sided die.
         The arguments should be any number of tuples or lists separated by commas.
         Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
         This method returns a tuple formatted as:
-        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+        ((<dice rolled>), (<roll result>, <min possible roll>, <max possible roll>, <median roll>))
         """
 
         min_val = 0
@@ -93,7 +94,6 @@ class DiceRoller:
         result = (roll_result, min_val, max_val, median_val)
         return dice_rolled, result
 
-    # TODO: Add documentation to the two new rolls
     def roll(self, *args):
         """
         Roll any number of dice, return and SAVE the result.
