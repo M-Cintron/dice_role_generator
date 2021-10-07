@@ -11,7 +11,7 @@ Simple Python program for generating random numbers based on inputted dice.
 ### Things I'd like to do (but might not get to):
 - [x] Make some test to make sure I'm not typing "role" instead of "roll" in every file
 - [x] Reformat .history() so that the values associated with "Dice" keys are dictionaries with the keys: 'num_dice', and 'num sides'
-- [ ] Revise the .roll() method to also function as a static method
+- [x] Revise the .roll() method to also function as a static method
 - [ ] Implement advantage and disadvantage rolling
 - [ ] Look into pylint to see if it can do my typo hunting job
 - [ ] Write a subclass of dice_roller that adds mobile friendly GUI (Kivy)
@@ -26,7 +26,11 @@ Simple Python program for generating random numbers based on inputted dice.
 1. Copy the file [dice_roller/dice_roller/\_\_init__.py](https://github.com/M-Cintron/dice_roller/blob/main/dice_roller/__init__.py) and paste in desired directory.
 2. Import the dice_roller directory.
 3. Create an instance of the DiceRoller class.
-4. Call .roll(), .history(), or .clear() methods.
+4. Call roll(), history(), or clear() methods.
+####OR
+1. Copy the file [dice_roller/dice_roller/\_\_init__.py](https://github.com/M-Cintron/dice_roller/blob/main/dice_roller/__init__.py) and paste in desired directory.
+2. Import DiceRoller from dice_roller directory
+3. Call static_roll() from DiceRoller directly (ie: `DiceRoller.static_roll()`)
 
 ### Example:
 Let's say you renamed the dice_roller init file to "dice_roller.py" and that
@@ -36,25 +40,34 @@ some_project/
 ├── dice_roller.py
 └── some_program.py
 ```
-If you want to roll 1, 10 sided dice in some_program.py, then do:  
-```
+If you want to roll 1, 10 sided die in some_program.py and have the record of the roll be called later,
+then do:  
+```pycon
 from dice_roller import DiceRoller
 
 
 dice_roller_instance = DiceRoller()
-print(dice_roller_instance.roll((1, 10)
+print(dice_roller_instance.roll((1, 10)))
+```
+If you don't care about getting the record of the roll being stored and just want to roll 1, 10 sided die,
+then do:
+```pycon
+from dice_roller import DiceRoller
+
+
+print(DiceRoller.static_roll((1, 10)))
 ```
 
-## .roll() Method
-.roll() accepts any number of tuples or lists, with each formatted as 
+## roll() Method
+roll() accepts any number of tuples or lists, with each formatted as 
 (``number of dice``, ``number of sides on the dice``).  Note: the number of dice and/or number of sides on the dice cannot 
 be zero or less.
-But if .roll() is ran with no arguments, it will roll 1, 20 sided die by default.  
+But if roll() is ran with no arguments, it will roll 1, 20 sided die by default.  
 
-.roll() returns a tuple containing, in this order: the result of the roll, the min possible value, the max 
-possible value, and the median roll value (.roll() also saves what dice you rolled and their roll results; this can be 
-accessed with the .history() method).  
-```
+roll() returns a tuple containing, in this order: the result of the roll, the min possible value, the max 
+possible value, and the median roll value (roll() also saves what dice you rolled and their roll results; this can be 
+accessed with the history() method).
+```pycon
 output = dice_roller_instance.roll((1, 6))
 print(output)
 >>> (2, 1, 6, 3.5)
@@ -66,24 +79,46 @@ median_val = output[3]
 ```
 
 Let's say we want to roll 5, 6 sided dice, and 1, 100 sided die.  This is how we'd do it:  
-```
+```pycon
 print(dice_roller_instance.roll((5, 6), (1, 100)))
 >>> (21, 6, 130, 68.0)
 ```  
 Rolling 1, 20 sided die:  
-```
+```pycon
 print(dice_roller_instance.roll())
 >>> (18, 1, 20, 10.5)
 ```
+On the logic of why roll returns more than just the actual result of the roll (NOT DOCUMENTATION):  
+roll() returns the min, max and median possible roll results alongside the actual result of the roll to help
+the user identify whether the roll was good or not.  While this might not be difficult to do when rolling, say
+1, 20 sided die, because it is apparent that the worse roll would be a 1 and the best would be a 20 and the 
+right in the middle is (about) 10. But if we roll 3, 4 sided die plus 2, 6 sided die, it is not immediately
+apparent what a good or bad roll would be from that.  The min possible. result helps us identify if we got the worse 
+result, and the opposite being true for the max possible result. And the median possible result helps us know 
+whether the result of our roll was closer to the highest or lowest possible roll result
 
-## .history() Method
-.history() takes no arguments and returns a JSON friendly dictionary containing info regarding every roll a given
+## static_roll() Method
+static_roll() works the same way as the roll() method, except that it does not require an instance of 
+DiceRoller to be called, and it does not save the results.  
+```pycon
+print(DiceRoller.static_roll())
+>>> (13, 1, 20, 10.5)
+
+print(DiceRoller.static_roll((2, 4), (1, 2)))
+>>> (4, 3, 10, 6.5)
+
+print(DiceRoller.static_roll((3, 6)))
+>>> (8, 3, 18, 10.5)
+```
+
+## history() Method
+history() takes no arguments and returns a JSON friendly dictionary containing info regarding every roll a given
 instance of DiceRoller has made.  The keys in this dictionary are "Roll_X" where x is the number of rolls the 
 DiceRoller instance has made before (Ex: "Roll_0" is the key for the first roll made).  The corresponding 
 values are another dictionary, with the keys 'Dice' (dice rolled), 'Result' (the result from the roll), 
 'Min' (the min possible roll result), 'Max' (the max possible roll result), and 'Median' (median possible roll).
 If an instance of DiceRoller has no roll records, then history will just return an empty dictionary.
-```
+```pycon
 new_instance = DiceRoller()
 print(new_instance.history())
 >>> {}
@@ -95,12 +130,15 @@ print(new_instance.roll((1, 4), (2, 6)))
 
 print(new_instance.history())
 >>> {'roll_0': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 10}, 
-'dice_1': {'number_of_dice': 3, 'number_of_sides': 4}, 'dice_2': {'number_of_dice': 1, 'number_of_sides': 1}}, 
-'result': 7, 'min': 5, 'max': 23, 'median': 14.0}, 'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 4}, 
-'dice_1': {'number_of_dice': 2, 'number_of_sides': 6}}, 'result': 15, 'min': 3, 'max': 16, 'median': 9.5}}
+'dice_1': {'number_of_dice': 3, 'number_of_sides': 4}, 
+'dice_2': {'number_of_dice': 1, 'number_of_sides': 1}}, 
+'result': 7, 'min': 5, 'max': 23, 'median': 14.0}, 
+'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 4}, 
+'dice_1': {'number_of_dice': 2, 'number_of_sides': 6}}, 
+'result': 15, 'min': 3, 'max': 16, 'median': 9.5}}
 ```
 Use Python's json package to 'pretty print' the dictionary
-```
+```pycon
 import json
 
 history_dict = new_instance.history()
@@ -145,9 +183,9 @@ print(json.dumps(history_dict, indent=4))
 }
 ```
 
-## .clear() Method
-.clear() takes no arguments and empties the records of rolls from a given instance of DiceRoller.
-```
+## clear() Method
+clear() takes no arguments and empties the records of rolls from a given instance of DiceRoller.
+```pycon
 third_instance = DiceRoller()
 
 print(third_instance.history())
@@ -174,6 +212,6 @@ in that file.  Make sure that the top two directories of the file path are 'dice
 
 For example, this very README.md file has a lot of purposeful 'role's in it, so here is what the 
 acceptable_role dictionary should look like: 
-```
+```pycon
 acceptable_roles = {"dice_roller/dice_roller/README.md": 13}
 ```
