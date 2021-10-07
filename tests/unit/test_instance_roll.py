@@ -1,4 +1,4 @@
-"""Unit tests for dice_roller.py"""
+"""Unit tests for the static roll() method"""
 import unittest
 import dice_roller
 
