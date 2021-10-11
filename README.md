@@ -64,9 +64,9 @@ roll() accepts any number of tuples or lists, with each formatted as
 be zero or less.
 But if roll() is ran with no arguments, it will roll 1, 20 sided die by default.  
 
-roll() returns a tuple containing, in this order: the result of the roll, the min possible value, the max 
-possible value, and the median roll value (roll() also saves what dice you rolled and their roll results; this can be 
-accessed with the history() method).
+roll(), by default returns a tuple containing, in this order: the result of the roll, the min possible value,
+the max possible value, and the median roll value (roll() also saves what dice you rolled and their roll 
+results; this can be accessed with the history() method).
 ```pycon
 output = dice_roller_instance.roll((1, 6))
 print(output)
@@ -88,14 +88,24 @@ Rolling 1, 20 sided die:
 print(dice_roller_instance.roll())
 >>> (18, 1, 20, 10.5)
 ```
+
+roll() also has two keyword arguments: `advantage` and `show_advantage_val`.  By default, advantage is set to
+None. If advantage is set to True, then DiceRoller will perform two rolls with the same dice and return the 
+higher value as the roll result.  If advantage is set to False, then DiceRoller will perform two rolls with 
+the same dice and return the lower value as the roll result.  By default, show_advantage_val is set to False.
+If advantage is either True or False and show_advantage_val is set to True, then this method returns a tuple 
+formatted as (thrown out val is the number that advantage/disadvantage didn't select):  
+`(<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)`
+
+
 On the logic of why roll returns more than just the actual result of the roll (NOT DOCUMENTATION):  
 roll() returns the min, max and median possible roll results alongside the actual result of the roll to help
 the user identify whether the roll was good or not.  While this might not be difficult to do when rolling, say
-1, 20 sided die, because it is apparent that the worse roll would be a 1 and the best would be a 20 and the 
+1, 20 sided die, because it is apparent that the worst roll would be a 1 and the best would be a 20 and the 
 right in the middle is (about) 10. But if we roll 3, 4 sided die plus 2, 6 sided die, it is not immediately
-apparent what a good or bad roll would be from that.  The min possible. result helps us identify if we got the worse 
+apparent what a good or bad roll would be from that.  The min possible result helps us identify if we got the worst 
 result, and the opposite being true for the max possible result. And the median possible result helps us know 
-whether the result of our roll was closer to the highest or lowest possible roll result
+whether the result of our roll was closer to the highest or lowest possible roll result.
 
 ## static_roll() Method
 static_roll() works the same way as the roll() method, except that it does not require an instance of 
@@ -211,7 +221,7 @@ dictionary 'acceptable_roles' as a string, and the associated value being the nu
 in that file.  Make sure that the top two directories of the file path are 'dice_roller/dice_roller'.  
 
 For example, this very README.md file has a lot of purposeful 'role's in it, so here is what the 
-acceptable_role dictionary should look like: 
+acceptable_roles dictionary should look like: 
 ```pycon
 acceptable_roles = {"dice_roller/dice_roller/README.md": 13}
 ```

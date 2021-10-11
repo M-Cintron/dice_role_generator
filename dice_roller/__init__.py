@@ -5,7 +5,8 @@ https://github.com/M-Cintron/dice_roller
 
 Bare bones dice roller that allows you to create a class that can roll any number of dice and get the result, recall
 the entire roll history of a given DiceRoller instance, and clear that history.  Or just roll some dice without creating
-a class instance.
+a class instance.  DiceRoller can also perform advantage/disadvantage rolling and can show the number thrown out due to
+advantage/disadvantage.
 
 Usage:
     >>> import dice_roller
@@ -13,8 +14,8 @@ Usage:
     >>> class_instance = dice_roller.DiceRoller()
 
     >>> print(class_instance.roll())
-    >>> print(class_instance.roll((1, 10)))
-    >>> print(class_instance.roll((3, 5), (2, 4), (1, 100), ...))
+    >>> print(class_instance.roll((1, 10), advantage=True), show_advantage_val=True)
+    >>> print(class_instance.roll((3, 5), (2, 4), (1, 100), (4, 6)))
     >>> print(class_instance.history())
     >>> class_instance.clear()
     >>> print(class_instance.history())
@@ -23,8 +24,8 @@ OR:
     >>> from dice_roller import DiceRoller
 
     >>> print(DiceRoller.static_roll())
-    >>> print(DiceRoller.static_roll((1, 4), (2, 6)))
-    >>> print(DiceRoller.static_roll((7, 2), (1, 8), (1, 12)))
+    >>> print(DiceRoller.static_roll((1, 4), (2, 6), advantage=False))
+    >>> print(DiceRoller.static_roll((7, 2), (1, 8), (1, 12), advantage=False, show_advantage_val=True))
 
 """
 from random import randint
@@ -41,20 +42,38 @@ class DiceRoller:
 
     @staticmethod
     # make _calculate_roll a static method so both roll() and static_roll() can use it
-    def _calculate_roll(*args):
+    def _calculate_roll(*args, advantage=None, show_advantage_val=False):
         """
         The method the performs the roll calculations for roll() and static_roll()
         Roll any number of dice, return and the dice rolled and the result.
 
-        Note: if no arguments are given to _calculate_roll(), then it rolls 1, 20 sided die.
+        If no arguments are given to _calculate_roll(), then it rolls 1, 20 sided die.
         The arguments should be any number of tuples or lists separated by commas.
         Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
-        This method returns a tuple formatted as:
+
+        By default, this method returns a tuple formatted as:
         ((<dice rolled>), (<roll result>, <min possible roll>, <max possible roll>, <median roll>))
+
+        This method accepts two keyword arguments: advantage and show_advantage_val.  By default advantage is set to
+        None.  If advantage is set to True, then DiceRoller will perform two rolls with the same dice and
+        return the higher value as the roll result.  If advantage is set to False, then DiceRoller will perform two
+        rolls with the same dice and return the lower value as the roll result.  By default show_advantage_val is set to
+        False.  If advantage is either True or False and show_advantage_val is set to True, then this method returns a
+        tuple formatted as (thrown out val is the number that advantage/disadvantage didn't select):
+        ((<dice rolled>), (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>))
         """
 
         min_val = 0
         max_val = 0
+
+        # check if advantage is either True, False or None, if not then raise error
+        if advantage is not True and advantage is not False and advantage is not None:
+            raise TypeError('the advantage argument must be either True, False or None')
+
+        # check if show_advantage_val is either True or False, if not then raise error
+        if show_advantage_val is not True and show_advantage_val is not False:
+            raise TypeError('the show_advantage_val argument must be either True or False')
+
 
         # if _calculate_roll() is ran with no parameters, assume we are rolling 1, 20 sided die
         if len(args) == 0:
@@ -88,41 +107,92 @@ class DiceRoller:
             min_val += num_dice
             max_val += num_dice * num_sides
 
-        dice_rolled = args
+        # check if advantage is True or False
+        if advantage:
+            advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
+            higher_val = advantage_rolls[1]
+            lower_val = advantage_rolls[0]
+            roll_result = higher_val
+        elif not advantage:
+            advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
+            higher_val = advantage_rolls[1]
+            lower_val = advantage_rolls[0]
+            roll_result = lower_val
+        else:
+            roll_result = randint(min_val, max_val)
+
         median_val = (min_val + max_val) / 2
-        roll_result = randint(min_val, max_val)
         result = (roll_result, min_val, max_val, median_val)
+        # append the thrown away advantage value if show_advantage_val is true
+        if show_advantage_val and advantage is True:
+            result += (lower_val,)
+        elif show_advantage_val and advantage is False:
+            result += (higher_val,)
+
+        dice_rolled = args
         return dice_rolled, result
 
-    def roll(self, *args):
+    @staticmethod
+    def _advantage_rolling(min_val, max_val):
         """
-        Roll any number of dice, return and SAVE the result.
+        Generate two random numbers from the same min_val and max_val, and return them in a sorted list
 
-        Note: if no arguments are given to roll(), then it rolls 1, 20 sided die.
+        The first number in advantage_rolls is the smaller number and the second number is the larger number.
+        """
+        roll_0 = randint(min_val, max_val)
+        roll_1 = randint(min_val, max_val)
+        advantage_rolls = [roll_0, roll_1]
+        advantage_rolls.sort()
+        return advantage_rolls
+
+    def roll(self, *args, advantage=None, show_advantage_val=False):
+        """
+        Roll any number of dice, return and the dice rolled and the result.
+
+        If no arguments are given to roll(), then it rolls 1, 20 sided die.
         The arguments should be any number of tuples or lists separated by commas.
         Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
-        This method returns a tuple formatted as:
+
+        By default, this method returns a tuple formatted as:
         (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+
+        This method accepts two keyword arguments: advantage and show_advantage_val.  By default advantage is set to
+        None.  If advantage is set to True, then DiceRoller will perform two rolls with the same dice and
+        return the higher value as the roll result.  If advantage is set to False, then DiceRoller will perform two
+        rolls with the same dice and return the lower value as the roll result.  By default show_advantage_val is set to
+        False.  If advantage is either True or False and show_advantage_val is set to True, then this method returns a
+        tuple formatted as (thrown out val is the number that advantage/disadvantage didn't select):
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)
+
         This method also stores the dice rolled and the result of said roll which can be accessed with the history()
-        method
+        method (Note: the thrown out advantage val is NOT recorded)
         """
 
-        dice_rolled, result = self._calculate_roll(*args)
+        dice_rolled, result = self._calculate_roll(*args, advantage=advantage, show_advantage_val=show_advantage_val)
         self._records.append((dice_rolled, result))
         return result
 
     @staticmethod
-    def static_roll(*args):
+    def static_roll(*args, advantage=None, show_advantage_val=False):
         """
         Roll any number of dice, and return the result.
 
         Note: if no arguments are given to static_roll(), then it rolls 1, 20 sided die.
         The arguments should be any number of tuples or lists separated by commas.
         Each tuple/list should be formatted as: (<number of dice being rolled>, <num sides of dice>)
-        This method returns a tuple formatted as:
+
+        By default, this method returns a tuple formatted as:
         (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+
+        This method accepts two keyword arguments: advantage and show_advantage_val.  By default advantage is set to
+        None.  If advantage is set to True, then DiceRoller will perform two rolls with the same dice and
+        return the higher value as the roll result.  If advantage is set to False, then DiceRoller will perform two
+        rolls with the same dice and return the lower value as the roll result.  By default show_advantage_val is set to
+        False.  If advantage is either True or False and show_advantage_val is set to True, then this method returns a
+        tuple formatted as (thrown out val is the number that advantage/disadvantage didn't select):
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)
         """
-        result = DiceRoller._calculate_roll(*args)[1]
+        result = DiceRoller._calculate_roll(*args, advantage=advantage, show_advantage_val=show_advantage_val)[1]
         return result
 
     def history(self):

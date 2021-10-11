@@ -135,5 +135,13 @@ class DiceRollerTests(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "the advantage argument must be either True, False or None"):
             DiceRoller.static_roll(advantage=1)
 
+    def test_str_show_advantage_val_input(self):
+        with self.assertRaisesRegex(TypeError, "the show_advantage_val argument must be either True or False"):
+            DiceRoller.static_roll(show_advantage_val='True')
+
+    def test_int_show_advantage_val_input(self):
+        with self.assertRaisesRegex(TypeError, "the show_advantage_val argument must be either True or False"):
+            DiceRoller.static_roll(show_advantage_val=1)
+
 # NOTE: when advantage = True or False and show_advantage_val = True, then static_roll() and roll() return an additional
 # number: the thrown out number; this is added to the end of the tuple
