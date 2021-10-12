@@ -12,7 +12,7 @@ Simple Python program for generating random numbers based on inputted dice.
 - [x] Make some test to make sure I'm not typing "role" instead of "roll" in every file
 - [x] Reformat .history() so that the values associated with "Dice" keys are dictionaries with the keys: 'num_dice', and 'num sides'
 - [x] Revise the .roll() method to also function as a static method
-- [ ] Implement advantage and disadvantage rolling
+- [x] Implement advantage and disadvantage rolling
 - [ ] Look into pylint to see if it can do my typo hunting job
 - [ ] Write a subclass of dice_roller that adds mobile friendly GUI (Kivy)
   - [ ] 3D dice that can be rolled would be cool but probably out of my scope
@@ -33,7 +33,7 @@ Simple Python program for generating random numbers based on inputted dice.
 3. Call static_roll() from DiceRoller directly (ie: `DiceRoller.static_roll()`)
 
 ### Example:
-Let's say you renamed the dice_roller init file to "dice_roller.py" and that
+Let's say you renamed the [dice_roller init file](https://github.com/M-Cintron/dice_roller/blob/main/dice_roller/__init__.py) to "dice_roller.py" and that
 your program's directory looks like this:
 ```
 some_project/  
@@ -95,8 +95,18 @@ higher value as the roll result.  If advantage is set to False, then DiceRoller 
 the same dice and return the lower value as the roll result.  By default, show_advantage_val is set to False.
 If advantage is either True or False and show_advantage_val is set to True, then this method returns a tuple 
 formatted as (thrown out val is the number that advantage/disadvantage didn't select):  
-`(<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)`
+`(<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)`  
 
+Rolling 1, 20 sided die with advantage:
+```pycon
+print(dice_roller_instance.roll(advantage=True, show_advantage_val=True))
+>>> (19, 1, 20, 10.5, 7)
+```
+Rolling 2, 4 sided die with disadvantage:
+```pycon
+print(dice_roller_instance.roll((2, 4), advantage=False, show_advantage_val=True))
+>>> (2, 2, 8, 5.0, 8)
+```
 
 On the logic of why roll returns more than just the actual result of the roll (NOT DOCUMENTATION):  
 roll() returns the min, max and median possible roll results alongside the actual result of the roll to help
@@ -119,6 +129,12 @@ print(DiceRoller.static_roll((2, 4), (1, 2)))
 
 print(DiceRoller.static_roll((3, 6)))
 >>> (8, 3, 18, 10.5)
+
+print(DiceRoller.static_roll((1, 6), advantage=True, show_advantage_val=True))
+>>> (3, 1, 6, 3.5, 3)
+
+print(DiceRoller.static_roll((1, 2), (2, 5), advantage=False, show_advantage_val=True))
+>>> (4, 3, 12, 7.5, 8)
 ```
 
 ## history() Method
