@@ -41,6 +41,108 @@ class DiceRoller:
         # make the instance's records of rolls protected
         self._records = []
 
+    def roll(self, *args, advantage=None, show_advantage_val=False):
+        """
+        Roll any number of dice, return and the dice rolled and the result.
+
+        If no arguments are given to roll(), then it rolls 1, 20 sided die.
+        The arguments should be any number of tuples or lists separated by commas.
+        Each tuple/list should be formatted as: (<number of dice being rolled>,
+                                                 <num sides of dice>)
+
+        By default, this method returns a tuple formatted as:
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+
+        This method accepts two keyword arguments: advantage and show_advantage_val.  By default
+        advantage is set to None.  If advantage is set to True, then DiceRoller will perform two
+        rolls with the same dice and return the higher value as the roll result.  If advantage is
+        set to False, then DiceRoller will perform two rolls with the same dice and return the
+        lower value as the roll result. By default show_advantage_val is set to False.  If
+        advantage is either True or False and show_advantage_val is set to True, then this
+        method returns a tuple formatted as (thrown out val is the number that
+        advantage/disadvantage didn't select):
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)
+
+        This method also stores the dice rolled and the result of said roll which can be accessed
+        with the history() method (Note: the thrown out advantage val is NOT recorded)
+        """
+
+        dice_rolled, result = self._calculate_roll(*args, advantage=advantage,
+                                                   show_advantage_val=show_advantage_val)
+        self._records.append((dice_rolled, result))
+        return result
+
+    @staticmethod
+    def static_roll(*args, advantage=None, show_advantage_val=False):
+        """
+        Roll any number of dice, and return the result.
+
+        Note: if no arguments are given to static_roll(), then it rolls 1, 20 sided die.
+        The arguments should be any number of tuples or lists separated by commas.
+        Each tuple/list should be formatted as: (<number of dice being rolled>,
+                                                 <num sides of dice>)
+
+        By default, this method returns a tuple formatted as:
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
+
+        This method accepts two keyword arguments: advantage and show_advantage_val.  By default
+        advantage is set to None.  If advantage is set to True, then DiceRoller will perform two
+        rolls with the same dice and return the higher value as the roll result.  If advantage is
+        set to False, then DiceRoller will perform two rolls with the same dice and return the
+        lower value as the roll result. By default show_advantage_val is set to False.  If
+        advantage is either True or False and show_advantage_val is set to True, then this
+        method returns a tuple formatted as (thrown out val is the number that
+        advantage/disadvantage didn't select):
+        (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)
+        """
+        result = DiceRoller._calculate_roll(*args, advantage=advantage,
+                                            show_advantage_val=show_advantage_val)[1]
+        return result
+
+    def history(self):
+        """
+        Return a JSON friendly dictionary containing the info for all rolls the current instance
+        of dice_roller has made
+
+        The dictionary created by this method is formatted as follows: the keys are 'Roll_<num>'
+        and the values are dictionaries containing the keys: 'Dice', 'Result', 'Min', 'Max',
+        'Median' with the associated values.
+        """
+
+        roll_history = {}
+        counter = 0
+
+        for roll_info in self._records:
+            result = roll_info[1][0]
+            min_roll = roll_info[1][1]
+            max_roll = roll_info[1][2]
+            median = roll_info[1][3]
+            roll_history[f'roll_{counter}'] = {'dice': {}, 'result': result, 'min': min_roll,
+                                               'max': max_roll, 'median': median}
+            # for every die inputted, add it to the value of the 'dice' key in roll_<current_roll>
+            dice_counter = 0
+            dice = roll_info[0]
+            for die in dice:
+                num_dice = die[0]
+                num_sides = die[1]
+                roll_history[f'roll_{counter}']['dice'].update(
+                    {f'dice_{dice_counter}': {"number_of_dice": num_dice,
+                                              "number_of_sides": num_sides}})
+                dice_counter += 1
+
+            counter += 1
+
+        return roll_history
+
+    def clear(self):
+        """
+        Clear the roll history of an instance of dice_roller
+
+        """
+
+        self._records = []
+        return "History Cleared!"
+
     @staticmethod
     def _calculate_roll(*args, advantage=None, show_advantage_val=False):
         """
@@ -162,105 +264,3 @@ class DiceRoller:
                 raise ValueError("Cannot roll zero or negative dice")
             if num_sides <= 0:
                 raise ValueError("Cannot roll dice with zero or negative sides")
-
-    def roll(self, *args, advantage=None, show_advantage_val=False):
-        """
-        Roll any number of dice, return and the dice rolled and the result.
-
-        If no arguments are given to roll(), then it rolls 1, 20 sided die.
-        The arguments should be any number of tuples or lists separated by commas.
-        Each tuple/list should be formatted as: (<number of dice being rolled>,
-                                                 <num sides of dice>)
-
-        By default, this method returns a tuple formatted as:
-        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
-
-        This method accepts two keyword arguments: advantage and show_advantage_val.  By default
-        advantage is set to None.  If advantage is set to True, then DiceRoller will perform two
-        rolls with the same dice and return the higher value as the roll result.  If advantage is
-        set to False, then DiceRoller will perform two rolls with the same dice and return the
-        lower value as the roll result. By default show_advantage_val is set to False.  If
-        advantage is either True or False and show_advantage_val is set to True, then this
-        method returns a tuple formatted as (thrown out val is the number that
-        advantage/disadvantage didn't select):
-        (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)
-
-        This method also stores the dice rolled and the result of said roll which can be accessed
-        with the history() method (Note: the thrown out advantage val is NOT recorded)
-        """
-
-        dice_rolled, result = self._calculate_roll(*args, advantage=advantage,
-                                                   show_advantage_val=show_advantage_val)
-        self._records.append((dice_rolled, result))
-        return result
-
-    @staticmethod
-    def static_roll(*args, advantage=None, show_advantage_val=False):
-        """
-        Roll any number of dice, and return the result.
-
-        Note: if no arguments are given to static_roll(), then it rolls 1, 20 sided die.
-        The arguments should be any number of tuples or lists separated by commas.
-        Each tuple/list should be formatted as: (<number of dice being rolled>,
-                                                 <num sides of dice>)
-
-        By default, this method returns a tuple formatted as:
-        (<roll result>, <min possible roll>, <max possible roll>, <median roll>)
-
-        This method accepts two keyword arguments: advantage and show_advantage_val.  By default
-        advantage is set to None.  If advantage is set to True, then DiceRoller will perform two
-        rolls with the same dice and return the higher value as the roll result.  If advantage is
-        set to False, then DiceRoller will perform two rolls with the same dice and return the
-        lower value as the roll result. By default show_advantage_val is set to False.  If
-        advantage is either True or False and show_advantage_val is set to True, then this
-        method returns a tuple formatted as (thrown out val is the number that
-        advantage/disadvantage didn't select):
-        (<roll result>, <min possible roll>, <max possible roll>, <median roll>, <thrown out val>)
-        """
-        result = DiceRoller._calculate_roll(*args, advantage=advantage,
-                                            show_advantage_val=show_advantage_val)[1]
-        return result
-
-    def history(self):
-        """
-        Return a JSON friendly dictionary containing the info for all rolls the current instance
-        of dice_roller has made
-
-        The dictionary created by this method is formatted as follows: the keys are 'Roll_<num>'
-        and the values are dictionaries containing the keys: 'Dice', 'Result', 'Min', 'Max',
-        'Median' with the associated values.
-        """
-
-        roll_history = {}
-        counter = 0
-
-        for roll_info in self._records:
-            result = roll_info[1][0]
-            min_roll = roll_info[1][1]
-            max_roll = roll_info[1][2]
-            median = roll_info[1][3]
-            roll_history[f'roll_{counter}'] = {'dice': {}, 'result': result, 'min': min_roll,
-                                               'max': max_roll, 'median': median}
-            # for every die inputted, add it to the value of the 'dice' key in roll_<current_roll>
-            dice_counter = 0
-            dice = roll_info[0]
-            for die in dice:
-                num_dice = die[0]
-                num_sides = die[1]
-                roll_history[f'roll_{counter}']['dice'].update(
-                    {f'dice_{dice_counter}': {"number_of_dice": num_dice,
-                                              "number_of_sides": num_sides}})
-                dice_counter += 1
-
-            counter += 1
-
-        return roll_history
-
-    def clear(self):
-        """
-        Clear the roll history of an instance of dice_roller
-
-        """
-
-        self._records = []
-        return "History Cleared!"
