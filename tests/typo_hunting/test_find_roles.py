@@ -12,7 +12,9 @@ class FindMistake(unittest.TestCase):
     def test_find_typo(self):
         """
         Go through every file in DiceRoller, search for 'role's, and check if that file should
-        have that many 'role's
+        have that many 'role's.
+
+        NOT MADE TO WORK ON WINDOWS
         """
         # get the relative path of the dice_roller main directory by getting the current working
         # directory, and removing the tests directory part.
