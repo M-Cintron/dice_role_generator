@@ -4,6 +4,9 @@ import dice_roller
 
 
 class DiceRollerIntegrationTests(unittest.TestCase):
+    """
+    Integration tests for DiceRoller that check that history() and clear() are working
+    """
 
     def test_no_history(self):
         """
@@ -61,23 +64,24 @@ class DiceRollerIntegrationTests(unittest.TestCase):
         result_3 = dice_roller_instance.roll((5, 4))
         result_4 = dice_roller_instance.roll()
 
-        self.assertEqual(dice_roller_instance.history(),
-                         {
-                             'roll_0': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 15}},
-                                        'result': result_0[0], 'min': 1, 'max': 15, 'median': 8.0},
-                             'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 30},
-                                                 'dice_1': {'number_of_dice': 2, 'number_of_sides': 10},
-                                                 'dice_2': {'number_of_dice': 1, 'number_of_sides': 100}},
-                                        'result': result_1[0], 'min': 4, 'max': 150, 'median': 77.0},
-                             'roll_2': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20},
-                                                 'dice_1': {'number_of_dice': 2, 'number_of_sides': 10}},
-                                        'result': result_2[0], 'min': 3, 'max': 40, 'median': 21.5},
-                             'roll_3': {'dice': {'dice_0': {'number_of_dice': 5, 'number_of_sides': 4}},
-                                        'result': result_3[0], 'min': 5, 'max': 20, 'median': 12.5},
-                             'roll_4': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20}},
-                                        'result': result_4[0], 'min': 1, 'max': 20, 'median': 10.5},
-                         }
-                         )
+        self.assertEqual(
+            dice_roller_instance.history(),
+            {
+                'roll_0': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 15}},
+                           'result': result_0[0], 'min': 1, 'max': 15, 'median': 8.0},
+                'roll_1': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 30},
+                                    'dice_1': {'number_of_dice': 2, 'number_of_sides': 10},
+                                    'dice_2': {'number_of_dice': 1, 'number_of_sides': 100}},
+                           'result': result_1[0], 'min': 4, 'max': 150, 'median': 77.0},
+                'roll_2': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20},
+                                    'dice_1': {'number_of_dice': 2, 'number_of_sides': 10}},
+                           'result': result_2[0], 'min': 3, 'max': 40, 'median': 21.5},
+                'roll_3': {'dice': {'dice_0': {'number_of_dice': 5, 'number_of_sides': 4}},
+                           'result': result_3[0], 'min': 5, 'max': 20, 'median': 12.5},
+                'roll_4': {'dice': {'dice_0': {'number_of_dice': 1, 'number_of_sides': 20}},
+                           'result': result_4[0], 'min': 1, 'max': 20, 'median': 10.5},
+            }
+        )
 
     def test_clear_history(self):
         """
