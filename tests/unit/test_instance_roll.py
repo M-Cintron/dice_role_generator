@@ -6,141 +6,163 @@ dice_roller_instance = dice_roller.DiceRoller()
 
 
 class DiceRollerTests(unittest.TestCase):
+    """Various tests for the roll() method"""
 
-    # test .roll() with no arguments rolls 1, 20 sided die
     def test_empty_roll(self):
+        """test roll() with no arguments rolls 1, 20 sided die"""
         roll = dice_roller_instance.roll()
         # check that the random number is some number between 1 and 20 (inclusive)
         self.assertIn(roll[0], range(1, 20+1))
         # check that the min, max, and median values are correct
         self.assertEqual(roll[1:], (1, 20, 10.5))
 
-    # test .roll() returns the correct response when rolling 3 different dice
     def test_3_rolls(self):
+        """test roll() returns the correct response when rolling 3 different dice"""
         roll = dice_roller_instance.roll((1, 20), (2, 10), (1, 100))
         self.assertIn(roll[0], range(4, 140+1))
         self.assertEqual(roll[1:], (4, 140, 72))
 
-    # test .roll() returns correct response when rolling dice in lists
     def test_3_rolls_lists(self):
+        """test roll() returns correct response when rolling dice in lists"""
         roll = dice_roller_instance.roll([1, 20], [2, 10], [1, 100])
         self.assertIn(roll[0], range(4, 140+1))
         self.assertEqual(roll[1:], (4, 140, 72))
 
-    # test test .roll() returns correct response when rolling 10, 1 sided dice
     def test_10_dice_1_side(self):
+        """test test roll() returns correct response when rolling 10, 1 sided dice"""
         roll = dice_roller_instance.roll((10, 1))
         self.assertEqual(roll, (10, 10, 10, 10))
 
-    # test .roll() returns correct error when given 0 dice
     def test_0_dice(self):
+        """test roll() returns correct error when given 0 dice"""
         with self.assertRaisesRegex(ValueError, 'Cannot roll zero or negative dice'):
             dice_roller_instance.roll((0, 5))
 
-    # test .roll() returns correct error when given 0 sided dice
     def test_0_sides(self):
+        """test roll() returns correct error when given 0 sided dice"""
         with self.assertRaisesRegex(ValueError, 'Cannot roll dice with zero or negative sides'):
             dice_roller_instance.roll((10, 0))
 
-    # test .roll() returns correct error when given negative sided dice
     def test_negative_sides(self):
+        """test roll() returns correct error when given negative sided dice"""
         with self.assertRaisesRegex(ValueError, 'Cannot roll dice with zero or negative sides'):
             dice_roller_instance.roll((1, -10))
 
-    # test .roll() returns correct error when given negative number of dice
     def test_negative_dice(self):
+        """test roll() returns correct error when given negative number of dice"""
         with self.assertRaisesRegex(ValueError, 'Cannot roll zero or negative dice'):
             dice_roller_instance.roll((-1, 10))
 
-    # test .roll() raises correct error when given a dict
     def test_dict_input(self):
+        """test roll() raises correct error when given a dict"""
         with self.assertRaisesRegex(TypeError, 'The arguments must be either lists or tuples'):
             dice_roller_instance.roll({2: 5})
 
-    # test .roll() raises correct error when given a string
     def test_str_input(self):
+        """test roll() raises correct error when given a string"""
         with self.assertRaisesRegex(TypeError, 'The arguments must be either lists or tuples'):
             dice_roller_instance.roll('egg')
 
-    # test .roll() raises correct error when given a set
     def test_set_input(self):
+        """test roll() raises correct error when given a set"""
         with self.assertRaisesRegex(TypeError, 'The arguments must be either lists or tuples'):
             dice_roller_instance.roll({1, 6})
 
-    # test .roll() raises correct error when given a non-integer number of dice
     def test_float_num_dice(self):
+        """test roll() raises correct error when given a non-integer number of dice"""
         with self.assertRaisesRegex(TypeError, 'The number of dice must be an integer'):
             dice_roller_instance.roll((1.2, 5))
 
-    # test .roll() raises correct error when given dice with a non-integer number of sides
     def test_float_num_sides(self):
-        with self.assertRaisesRegex(TypeError, 'The number of sides on the dice must be an integer'):
+        """test roll() raises correct error when given dice with a non-integer number of sides"""
+        with self.assertRaisesRegex(
+                TypeError, 'The number of sides on the dice must be an integer'):
             dice_roller_instance.roll((3, 1.414))
 
-    # test .roll() raises correct error when a dice input has more than 2 arguments
     def test_excess_values(self):
-        with self.assertRaisesRegex(TypeError, "dice_roller expected tuple/list containing 2 items, got 3"):
+        """test roll() raises correct error when a dice input has more than 2 arguments"""
+        with self.assertRaisesRegex(
+                TypeError, "dice_roller expected tuple/list containing 2 items, got 3"):
             dice_roller_instance.roll((1, 4, 5))
 
-    # test .roll() raises correct error when a dice input has less than 2 arguments
     def test_missing_values(self):
+        """test roll() raises correct error when a dice input has less than 2 arguments"""
         with self.assertRaisesRegex(TypeError,
                                     "dice_roller expected tuple/list containing 2 items, got 1"):
             dice_roller_instance.roll([2])
 
     def test_advantage_works(self):
+        """Test advantage is working with no defined die tuple"""
         roll = dice_roller_instance.roll(advantage=True, show_advantage_val=True)
         self.assertIn(roll[0], range(1, 20+1))
         self.assertEqual(roll[1:4], (1, 20, 10.5))
         self.assertGreaterEqual(roll[0], roll[4])
 
     def test_advantage_1_die(self):
-        roll = dice_roller_instance.roll((1, 10), advantage=True, show_advantage_val=True)
+        """Test advantage is working with one die tuple"""
+        roll = dice_roller_instance.roll((1, 10),
+                                         advantage=True, show_advantage_val=True)
         self.assertIn(roll[0], range(1, 10 + 1))
         self.assertEqual(roll[1:4], (1, 10, 5.5))
         self.assertGreaterEqual(roll[0], roll[4])
 
     def test_advantage_3_dice(self):
-        roll = dice_roller_instance.roll((1, 10), (3, 4), (2, 6), advantage=True, show_advantage_val=True)
+        """Test advantage is working with three dice tuple"""
+        roll = dice_roller_instance.roll((1, 10), (3, 4), (2, 6),
+                                         advantage=True, show_advantage_val=True)
         self.assertIn(roll[0], range(6, 34 + 1))
         self.assertEqual(roll[1:4], (6, 34, 20.0))
         self.assertGreaterEqual(roll[0], roll[4])
 
     def test_disadvantage_works(self):
+        """Test disadvantage is working with no defined die tuple"""
         roll = dice_roller_instance.roll(advantage=False, show_advantage_val=True)
         self.assertIn(roll[0], range(1, 20+1))
         self.assertEqual(roll[1:4], (1, 20, 10.5))
         self.assertLessEqual(roll[0], roll[4])
 
     def test_disadvantage_1_die(self):
-        roll = dice_roller_instance.roll((1, 6), advantage=False, show_advantage_val=True)
+        """Test disadvantage is working with one die tuple"""
+        roll = dice_roller_instance.roll((1, 6),
+                                         advantage=False, show_advantage_val=True)
         self.assertIn(roll[0], range(1, 6 + 1))
         self.assertEqual(roll[1:4], (1, 6, 3.5))
         self.assertLessEqual(roll[0], roll[4])
 
     def test_disadvantage_3_dice(self):
-        roll = dice_roller_instance.roll((2, 4), (1, 12), (1, 2), advantage=False, show_advantage_val=True)
+        """Test disadvantage is working with three dice tuples"""
+        roll = dice_roller_instance.roll((2, 4), (1, 12), (1, 2),
+                                         advantage=False, show_advantage_val=True)
         self.assertIn(roll[0], range(4, 22 + 1))
         self.assertEqual(roll[1:4], (4, 22, 13.0))
         self.assertLessEqual(roll[0], roll[4])
 
-    def test_advantage_None(self):
+    def test_advantage_none(self):
+        """Make sure DiceRoller still works when advantage=None and show_advantage_val=True"""
         roll = dice_roller_instance.roll(advantage=None, show_advantage_val=True)
         self.assertIn(roll[0], range(1, 20+1))
         self.assertEqual(roll[1:], (1, 20, 10.5))
 
     def test_str_advantage_input(self):
-        with self.assertRaisesRegex(TypeError, "the advantage argument must be either True, False or None"):
+        """Make sure DiceRoller returns an error when advantage is given a str"""
+        with self.assertRaisesRegex(
+                TypeError, "the advantage argument must be either True, False or None"):
             dice_roller_instance.roll(advantage='True')
 
     def test_int_advantage_input(self):
-        with self.assertRaisesRegex(TypeError, "the advantage argument must be either True, False or None"):
+        """Make sure DiceRoller returns an error when advantage is given an int"""
+        with self.assertRaisesRegex(
+                TypeError, "the advantage argument must be either True, False or None"):
             dice_roller_instance.roll(advantage=1)
 
     def test_str_show_advantage_val_input(self):
-        with self.assertRaisesRegex(TypeError, "the show_advantage_val argument must be either True or False"):
+        """Make sure DiceRoller returns an error when show_advantage_val is given a str"""
+        with self.assertRaisesRegex(
+                TypeError, "the show_advantage_val argument must be either True or False"):
             dice_roller_instance.roll(show_advantage_val='True')
 
     def test_int_show_advantage_val_input(self):
-        with self.assertRaisesRegex(TypeError, "the show_advantage_val argument must be either True or False"):
+        """Make sure DiceRoller returns an error when show_advantage_val is given an int"""
+        with self.assertRaisesRegex(
+                TypeError, "the show_advantage_val argument must be either True or False"):
             dice_roller_instance.roll(show_advantage_val=1)
