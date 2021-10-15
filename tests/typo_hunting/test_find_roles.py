@@ -40,10 +40,10 @@ class FindMistake(unittest.TestCase):
 
             # go through each file individually
             for file in files:
-                with open(os.path.join(root, file), "r", encoding='UTF-8') as f:
+                with open(os.path.join(root, file), "r", encoding='UTF-8') as file_object:
 
                     # make the file into one string and make everything lowercase
-                    file_string = (f.read()).lower()
+                    file_string = (file_object.read()).lower()
                     num_roles = file_string.count('role')
 
                     # if 'role's are found in a file

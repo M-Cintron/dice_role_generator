@@ -1,3 +1,4 @@
+# pylint: disable=R0801, R0904
 """Unit tests for the static roll() method"""
 import unittest
 import dice_roller

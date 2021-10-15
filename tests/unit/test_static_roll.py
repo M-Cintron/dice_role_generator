@@ -1,3 +1,4 @@
+# pylint: disable=R0801, R0904
 """Unit tests for the static_roll() method"""
 import unittest
 from dice_roller import DiceRoller
@@ -72,7 +73,9 @@ class DiceRollerTests(unittest.TestCase):
             DiceRoller.static_roll((1.2, 5))
 
     def test_float_num_sides(self):
-        """test static_roll() raises correct error when given dice with a non-integer number of sides"""
+        """
+        test static_roll() raises correct error when given dice with a non-integer number of sides
+        """
         with self.assertRaisesRegex(
                 TypeError, 'The number of sides on the dice must be an integer'):
             DiceRoller.static_roll((3, 1.414))
