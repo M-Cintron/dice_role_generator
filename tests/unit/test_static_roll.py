@@ -1,10 +1,11 @@
-# pylint: disable=R0801, R0904
 """Unit tests for the static_roll() method"""
 import unittest
 from dice_roller import DiceRoller
 
 
 class DiceRollerTests(unittest.TestCase):
+    # ignore pylint errors for too many public methods and duplicate code (doesn't work)
+    # pylint: disable=R0904, R0801
     """Various tests for the static_roll() method"""
 
     def test_empty_roll(self):

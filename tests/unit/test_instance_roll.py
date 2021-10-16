@@ -1,4 +1,3 @@
-# pylint: disable=R0801, R0904
 """Unit tests for the static roll() method"""
 import unittest
 import dice_roller
@@ -7,6 +6,8 @@ dice_roller_instance = dice_roller.DiceRoller()
 
 
 class DiceRollerTests(unittest.TestCase):
+    # ignore pylint errors for too many public methods and duplicate code (doesn't work)
+    # pylint: disable=R0904, R0801
     """Various tests for the roll() method"""
 
     def test_empty_roll(self):
