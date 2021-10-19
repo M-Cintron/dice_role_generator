@@ -26,8 +26,8 @@ Simple Python program for generating random numbers based on inputted dice.
 1. Copy the file [dice_roller/dice_roller/\_\_init__.py](https://github.com/M-Cintron/dice_roller/blob/main/dice_roller/__init__.py) and paste in desired directory.
 2. Import the dice_roller directory.
 3. Create an instance of the DiceRoller class.
-4. Call roll(), history(), or clear() methods.
-####OR
+4. Call roll(), history(), or clear() methods.  
+#### OR
 1. Copy the file [dice_roller/dice_roller/\_\_init__.py](https://github.com/M-Cintron/dice_roller/blob/main/dice_roller/__init__.py) and paste in desired directory.
 2. Import DiceRoller from dice_roller directory
 3. Call static_roll() from DiceRoller directly (ie: `DiceRoller.static_roll()`)
