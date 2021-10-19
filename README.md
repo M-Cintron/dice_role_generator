@@ -14,6 +14,7 @@ Simple Python program for generating random numbers based on inputted dice.
 - [x] Revise the .roll() method to also function as a static method
 - [x] Implement advantage and disadvantage rolling
 - [ ] Look into pylint to see if it can do my typo hunting job
+  - Putting this off for now (GitHub Actions for pylint not working)
 - [ ] Write a subclass of dice_roller that adds mobile friendly GUI (Kivy)
   - [ ] 3D dice that can be rolled would be cool but probably out of my scope
 - [ ] Figure out how to write tests for GUI

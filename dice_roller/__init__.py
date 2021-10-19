@@ -191,11 +191,9 @@ class DiceRoller:
         if advantage:
             advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
             higher_val = advantage_rolls[1]
-            lower_val = advantage_rolls[0]
             roll_result = higher_val
         elif not advantage:
             advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
-            higher_val = advantage_rolls[1]
             lower_val = advantage_rolls[0]
             roll_result = lower_val
         else:
@@ -204,9 +202,9 @@ class DiceRoller:
         median_val = (min_val + max_val) / 2
         result = (roll_result, min_val, max_val, median_val)
         # append the thrown away advantage value if show_advantage_val is true
-        if show_advantage_val and advantage is True:
+        if show_advantage_val is True and advantage is True:
             result += (lower_val,)
-        elif show_advantage_val and advantage is False:
+        elif show_advantage_val is True and advantage is False:
             result += (higher_val,)
 
         dice_rolled = args
