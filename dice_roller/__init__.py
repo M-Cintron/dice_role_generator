@@ -177,17 +177,8 @@ class DiceRoller:
         # if _calculate_roll() is ran with no parameters, assume we are rolling 1, 20 sided die
         if len(args) == 0:
             args = ((1, 20),)
-
-        for dice_info in args:
-            # change dice_info into a tuple for convenience
-            dice_info = tuple(dice_info)
-
-            num_dice = dice_info[0]
-            num_sides = dice_info[1]
-            min_val += num_dice
-            max_val += num_dice * num_sides
-
-        # check if advantage is True or False
+# TODO: following code needs revision to fix the probability bug
+        # check if advantage is True or False, THEN PERFORM THE ROLLS INDIVIDUALLY
         if advantage:
             advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
             higher_val = advantage_rolls[1]
@@ -198,6 +189,15 @@ class DiceRoller:
             roll_result = lower_val
         else:
             roll_result = randint(min_val, max_val)
+
+        for dice_info in args:
+            # change dice_info into a tuple for convenience
+            dice_info = tuple(dice_info)
+
+            num_dice = dice_info[0]
+            num_sides = dice_info[1]
+            min_val += num_dice
+            max_val += num_dice * num_sides
 
         median_val = (min_val + max_val) / 2
         result = (roll_result, min_val, max_val, median_val)
