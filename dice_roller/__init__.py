@@ -222,7 +222,7 @@ class DiceRoller:
             num_dice = dice_info[0]
             num_sides = dice_info[1]
 
-            for i in range(num_dice):
+            for _ in range(num_dice):
                 # roll each die, and add the result to roll_result
                 roll_result += randint(1, num_sides)
 
