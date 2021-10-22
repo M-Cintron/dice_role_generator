@@ -171,16 +171,16 @@ class DiceRoller:
         # check that all the arguments given are valid for this method
         DiceRoller._check_types(*args, advantage=advantage, show_advantage_val=show_advantage_val)
 
+        # if _calculate_roll() is ran with no parameters, assume we are rolling 1, 20 sided die
+        if len(args) == 0:
+            args = ((1, 20),)
+
         # calculate the min and max possible roll values
         min_val = 0
         max_val = 0
         for dice_tuple in args:
             min_val += dice_tuple[0]
             max_val += dice_tuple[0] * dice_tuple[1]
-
-        # if _calculate_roll() is ran with no parameters, assume we are rolling 1, 20 sided die
-        if len(args) == 0:
-            args = ((1, 20),)
 
         # check if advantage is True or False, then perform the appropriate roll
         if advantage:
