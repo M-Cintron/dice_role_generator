@@ -185,11 +185,13 @@ class DiceRoller:
         # check if advantage is True or False, then perform the appropriate roll
         if advantage:
             advantage_rolls = DiceRoller._advantage_rolling(*args)
+            lower_val = advantage_rolls[0]
             higher_val = advantage_rolls[1]
             roll_result = higher_val
         elif not advantage:
             advantage_rolls = DiceRoller._advantage_rolling(*args)
             lower_val = advantage_rolls[0]
+            higher_val = advantage_rolls[1]
             roll_result = lower_val
         else:
             roll_result = DiceRoller._get_roll_results(*args)
