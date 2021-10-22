@@ -188,7 +188,7 @@ class DiceRoller:
             lower_val = advantage_rolls[0]
             higher_val = advantage_rolls[1]
             roll_result = higher_val
-        elif not advantage:
+        elif advantage is False:
             advantage_rolls = DiceRoller._advantage_rolling(*args)
             lower_val = advantage_rolls[0]
             higher_val = advantage_rolls[1]
