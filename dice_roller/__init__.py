@@ -190,11 +190,13 @@ class DiceRoller:
         # check if advantage is True or False
         if advantage:
             advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
+            lower_val = advantage_rolls[0]
             higher_val = advantage_rolls[1]
             roll_result = higher_val
         elif not advantage:
             advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
             lower_val = advantage_rolls[0]
+            higher_val = advantage_rolls[1]
             roll_result = lower_val
         else:
             roll_result = randint(min_val, max_val)
