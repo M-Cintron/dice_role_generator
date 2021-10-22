@@ -146,7 +146,7 @@ class DiceRoller:
     @staticmethod
     def _calculate_roll(*args, advantage=None, show_advantage_val=False):
         """
-        The method the performs the roll calculations for roll() and static_roll()
+        The method that performs the roll logic for roll() and static_roll()
         Roll any number of dice, return and the dice rolled and the result.
 
         If no arguments are given to _calculate_roll(), then it rolls 1, 20 sided die.
@@ -171,37 +171,32 @@ class DiceRoller:
         # check that all the arguments given are valid for this method
         DiceRoller._check_types(*args, advantage=advantage, show_advantage_val=show_advantage_val)
 
+        # calculate the min and max possible roll values
         min_val = 0
         max_val = 0
+        for dice_tuple in args:
+            min_val += dice_tuple[0]
+            max_val += dice_tuple[0] * dice_tuple[1]
 
         # if _calculate_roll() is ran with no parameters, assume we are rolling 1, 20 sided die
         if len(args) == 0:
             args = ((1, 20),)
-# TODO: following code needs revision to fix the probability bug
-        # check if advantage is True or False, THEN PERFORM THE ROLLS INDIVIDUALLY
+
+        # check if advantage is True or False, then perform the appropriate roll
         if advantage:
-            advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
+            advantage_rolls = DiceRoller._advantage_rolling(*args)
             higher_val = advantage_rolls[1]
             roll_result = higher_val
         elif not advantage:
-            advantage_rolls = DiceRoller._advantage_rolling(min_val, max_val)
+            advantage_rolls = DiceRoller._advantage_rolling(*args)
             lower_val = advantage_rolls[0]
             roll_result = lower_val
         else:
-            roll_result = randint(min_val, max_val)
-
-        for dice_info in args:
-            # change dice_info into a tuple for convenience
-            dice_info = tuple(dice_info)
-
-            num_dice = dice_info[0]
-            num_sides = dice_info[1]
-            min_val += num_dice
-            max_val += num_dice * num_sides
+            roll_result = DiceRoller._get_roll_results(*args)
 
         median_val = (min_val + max_val) / 2
         result = (roll_result, min_val, max_val, median_val)
-        # append the thrown away advantage value if show_advantage_val is true
+        # append the thrown away advantage value to result if show_advantage_val is true
         if show_advantage_val is True and advantage is True:
             result += (lower_val,)
         elif show_advantage_val is True and advantage is False:
@@ -211,16 +206,37 @@ class DiceRoller:
         return dice_rolled, result
 
     @staticmethod
-    def _advantage_rolling(min_val, max_val):
+    def _get_roll_results(*args):
         """
-        Generate two random numbers from the same min_val and max_val, and return them in a sorted
-        list
+        Method that calculates the actual roll results for _calculate_roll()
+        """
+
+        roll_result = 0
+        # go through every dice tuple
+        for dice_info in args:
+            # change dice_info into a tuple for convenience
+            dice_info = tuple(dice_info)
+
+            num_dice = dice_info[0]
+            num_sides = dice_info[1]
+
+            for i in range(num_dice):
+                # roll each die, and add the result to roll_result
+                roll_result += randint(1, num_sides)
+
+        return roll_result
+
+    @staticmethod
+    def _advantage_rolling(*args):
+        """
+        Generate two random numbers from the same dice, and return them in a sorted list
 
         The first number in advantage_rolls is the smaller number and the second number is the
         larger number.
         """
-        roll_0 = randint(min_val, max_val)
-        roll_1 = randint(min_val, max_val)
+
+        roll_0 = DiceRoller._get_roll_results(*args)
+        roll_1 = DiceRoller._get_roll_results(*args)
         advantage_rolls = [roll_0, roll_1]
         advantage_rolls.sort()
         return advantage_rolls
