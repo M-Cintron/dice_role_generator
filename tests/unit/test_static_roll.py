@@ -1,5 +1,6 @@
 """Unit tests for the static_roll() method"""
 import unittest
+import random
 from dice_roller import DiceRoller
 
 
@@ -168,3 +169,29 @@ class DiceRollerTests(unittest.TestCase):
         with self.assertRaisesRegex(
                 TypeError, "the show_advantage_val argument must be either True or False"):
             DiceRoller.static_roll(show_advantage_val=1)
+
+    def test_advantage_off(self):
+        """
+        Make sure advantage re-rolling is not occurring by checking if the roll result returns the
+        expected values.
+        """
+        random.seed(1)
+        vals_0 = self.roll_1000((2, 5))
+        self.assertEqual(vals_0, {'7': 168, '4': 115, '5': 147, '8': 107, '6': 211, '9': 94, '2': 33,
+                                '3': 74, '10': 51})
+
+        vals_1 = self.roll_1000((1, 10))
+        self.assertEqual(vals_1, {'1': 95, '5': 88, '9': 100, '7': 90, '6': 120, '10': 101,
+                                  '4': 104, '2': 93, '3': 109, '8': 100})
+
+    def roll_1000(self, *args, advantage=None, show_advantage_val=False):
+        vals = {}
+        for _ in range(1000):
+            result = DiceRoller.static_roll(*args, advantage=advantage,
+                                            show_advantage_val=show_advantage_val)
+            val = result[0]
+            if f'{val}' not in vals:
+                vals[f'{val}'] = 1
+            else:
+                vals[f'{val}'] += 1
+        return vals
