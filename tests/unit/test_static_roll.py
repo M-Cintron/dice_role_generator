@@ -176,22 +176,73 @@ class DiceRollerTests(unittest.TestCase):
         expected values.
         """
         random.seed(1)
-        vals_0 = self.roll_1000((2, 5))
-        self.assertEqual(vals_0, {'7': 168, '4': 115, '5': 147, '8': 107, '6': 211, '9': 94, '2': 33,
-                                '3': 74, '10': 51})
+        vals_0 = roll_1000((2, 5))
+        self.assertEqual(vals_0, {'7': 168, '4': 115, '5': 147, '8': 107, '6': 211, '9': 94,
+                                  '2': 33, '3': 74, '10': 51})
 
-        vals_1 = self.roll_1000((1, 10))
+        vals_1 = roll_1000((1, 10))
         self.assertEqual(vals_1, {'1': 95, '5': 88, '9': 100, '7': 90, '6': 120, '10': 101,
                                   '4': 104, '2': 93, '3': 109, '8': 100})
 
-    def roll_1000(self, *args, advantage=None, show_advantage_val=False):
-        vals = {}
-        for _ in range(1000):
-            result = DiceRoller.static_roll(*args, advantage=advantage,
-                                            show_advantage_val=show_advantage_val)
-            val = result[0]
-            if f'{val}' not in vals:
-                vals[f'{val}'] = 1
-            else:
-                vals[f'{val}'] += 1
-        return vals
+        vals_2 = roll_1000((1, 2), (2, 4))
+        self.assertEqual(vals_2, {'9': 100, '5': 170, '6': 207, '7': 222, '8': 155, '4': 91,
+                                  '3': 22, '10': 33})
+
+    def test_advantage_on(self):
+        """
+        Make sure advantage re-rolling is working properly when given a set random.seed() by
+        checking the results with the expected values
+        """
+
+        random.seed(0)
+        vals_0 = roll_1000(advantage=True)
+        self.assertEqual(vals_0, {'14': 74, '9': 45, '17': 84, '13': 71, '16': 91, '19': 82,
+                                  '10': 41, '20': 97, '18': 83, '11': 49, '12': 60, '7': 24,
+                                  '8': 42, '3': 16, '15': 61, '6': 28, '5': 26, '4': 13, '2': 12,
+                                  '1': 1})
+
+        vals_1 = roll_1000((1, 6), advantage=True)
+        self.assertEqual(vals_1, {'4': 181, '6': 332, '5': 254, '3': 122, '2': 84, '1': 27})
+
+        vals_2 = roll_1000((1, 4), (2, 8), advantage=True)
+        self.assertEqual(vals_2, {'17': 76, '19': 20, '8': 33, '16': 98, '20': 7, '13': 146,
+                                  '14': 136, '11': 85, '18': 39, '12': 117, '15': 110, '9': 45,
+                                  '10': 71, '6': 4, '7': 11, '5': 2})
+
+    def test_disadvantage_on(self):
+        """
+        Make sure disadvantage re-rolling is working properly when given a set random.seed() by
+        checking the results with the expected values
+        """
+
+        random.seed(4)
+        vals_0 = roll_1000(advantage=False)
+        self.assertEqual(vals_0, {'8': 64, '4': 76, '5': 77, '3': 83, '1': 80, '10': 56, '2': 94,
+                                  '17': 20, '9': 58, '7': 70, '6': 96, '11': 45, '14': 25,
+                                  '12': 48, '13': 36, '16': 28, '15': 30, '20': 1, '19': 4,
+                                  '18': 9})
+
+        vals_1 = roll_1000((1, 8), advantage=False)
+        self.assertEqual(vals_1, {'1': 235, '2': 207, '4': 125, '3': 188, '6': 70, '5': 117,
+                                  '7': 47, '8': 11})
+
+        vals_2 = roll_1000((1, 3), (1, 10), advantage=False)
+        self.assertEqual(vals_2, {'9': 72, '7': 102, '3': 125, '6': 138, '11': 31, '10': 57,
+                                  '4': 178, '5': 129, '8': 79, '12': 11, '2': 78})
+
+
+def roll_1000(*args, advantage=None, show_advantage_val=False):
+    """ Roll static_roll() 1000 times with the given inputs and return a dictionary, with the keys
+    being the numbers that were rolled and the associated values being how many times a given
+    number was rolled
+    """
+    vals = {}
+    for _ in range(1000):
+        result = DiceRoller.static_roll(*args, advantage=advantage,
+                                        show_advantage_val=show_advantage_val)
+        val = result[0]
+        if f'{val}' not in vals:
+            vals[f'{val}'] = 1
+        else:
+            vals[f'{val}'] += 1
+    return vals
