@@ -236,6 +236,7 @@ def roll_1000(*args, advantage=None, show_advantage_val=False):
     being the numbers that were rolled and the associated values being how many times a given
     number was rolled
     """
+
     vals = {}
     for _ in range(1000):
         result = DiceRoller.static_roll(*args, advantage=advantage,
